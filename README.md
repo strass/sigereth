@@ -1,2 +1,0 @@
-# sigereth
-Created with CodeSandbox

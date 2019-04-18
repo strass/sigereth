@@ -8,7 +8,7 @@ import { store } from '../../services/Firestation';
 import CombatantItem from '../molecules/CombatantsList/CombatantItem';
 
 export const CombatantContext = createContext<
-  DocumentSnapshotExpanded<Combatant>
+  DocumentSnapshotExpanded<Combatant> | null
 >(null);
 
 const CombatantWithContext: FunctionComponent<{

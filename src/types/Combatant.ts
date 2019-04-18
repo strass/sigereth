@@ -1,3 +1,5 @@
+import { firestore } from "firebase";
+
 interface MoteCount {
   current: number;
   total: number;
@@ -17,6 +19,7 @@ interface Combatant {
   ignoreOnslaught: false | 'TURN_END' | 'SCENELONG';
   dodge: number;
   parry: number;
+  owner: firestore.DocumentReference;
 
   motes: {
     personal: MoteCount;

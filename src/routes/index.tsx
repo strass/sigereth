@@ -10,6 +10,7 @@ import GameHeader from '../components/pages/GameHeader';
 import { Fragment } from 'react';
 import DevNotes from '../DevNotes';
 import ErrorBoundary from '../components/atoms/ErrorBoundary';
+import { Link } from 'found';
 
 const Router = createBrowserRouter({
   routeConfig: makeRouteConfig(
@@ -43,7 +44,9 @@ const Router = createBrowserRouter({
   ),
 
   renderError: ({ error }) => (
-    <div>{error.status === 404 ? 'Not found' : 'Error'}</div>
+    <div>{error.status === 404 ? 'Not found' : 'Error'}{' '}
+    <Link to="/games/malfeas">to game</Link>
+    </div>
   ),
 });
 

@@ -11,7 +11,7 @@ const Tooltip: RefForwardingComponent<
   HTMLElement,
   { children: ReactNode; isOpen: boolean } & HTMLAttributes<HTMLElement>
 > = ({ children, isOpen, ...props }, ref) => {
-  return (
+  return isOpen ? (
     <aside
       css={[
         !isOpen && { visibility: 'hidden' },
@@ -24,7 +24,7 @@ const Tooltip: RefForwardingComponent<
     >
       {children}
     </aside>
-  );
+  ) : null;
 };
 
 export default forwardRef(Tooltip);

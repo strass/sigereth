@@ -16,6 +16,7 @@ import useCombatantAction from '../../../hooks/useCombatantAction';
 import { DamageType, damageLevelKeys } from '../../../types/Generic';
 import { reduce } from 'lodash';
 import CombatantSection from './Section';
+import Tooltip from '../../atoms/Tooltip';
 
 const CombatantHealth: FunctionComponent = () => {
   const [referenceNode, setReferenceNode] = useState(null);
@@ -65,10 +66,10 @@ const CombatantHealth: FunctionComponent = () => {
           {currentWoundPenalty}
         </span>
         {createPortal(
-          <form
+          <Tooltip
+            isOpen={hovering}
             ref={setPopperNode}
-            css={[styles, !hovering && { visibility: 'hidden' }]}
-            onSubmit={e => e.preventDefault()}
+            css={[styles, { minHeight: 60 }]}
           >
             <fieldset css={{ background: 'white' }}>
               <legend>
@@ -229,7 +230,7 @@ const CombatantHealth: FunctionComponent = () => {
                 </ul>
               </div>
             </fieldset>
-          </form>,
+          </Tooltip>,
           document.querySelector('body')
         )}
       </Fragment>

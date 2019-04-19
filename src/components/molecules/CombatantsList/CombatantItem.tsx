@@ -1,6 +1,7 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import { FunctionComponent, useContext, memo, useState } from 'react';
+import { Collapse } from 'react-collapse';
 import Combatant from '../../../types/Combatant';
 import CheckboxAtom from '../../atoms/Checkbox';
 import MoteDisplay from '../Combatant/MoteDisplay';
@@ -13,13 +14,10 @@ import Notes from '../Combatant/Notes';
 import { CombatantContext } from '../../context/CombatantContext';
 import { horizontalList, unstyleList } from '../../../styling/list';
 import { flexCenter } from '../../../styling/flex';
-import Section from '../Combatant/Section';
-import { Collapse } from 'react-collapse';
 import WindowContext from '../../context/WindowContext';
+import CombatantName from '../Combatant/Name';
 
-const CombatantItem: FunctionComponent<{ isActive: boolean }> = ({
-  isActive,
-}) => {
+const CombatantItem: FunctionComponent<{ isActive: boolean }> = ({ isActive }) => {
   const { dispatch } = useContext(WindowContext);
   const combatant = useContext(CombatantContext);
   const [detailsOpen, setDetailsOpen] = useState(false);
@@ -34,9 +32,9 @@ const CombatantItem: FunctionComponent<{ isActive: boolean }> = ({
         border: `1px solid ${!combatant.data.turnOver ? 'black' : 'grey'}`,
         borderRadius: 6,
         boxShadow: !isActive
-          ? `0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)`
-          : `0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22)`,
-        transition: `box-shadow 0.3s cubic-bezier(.25,.8,.25,1)`,
+          ? '0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)'
+          : '0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22)',
+        transition: 'box-shadow 0.3s cubic-bezier(.25,.8,.25,1)',
         position: 'relative',
       }}
     >
@@ -76,52 +74,19 @@ const CombatantItem: FunctionComponent<{ isActive: boolean }> = ({
           <Initiative />
         </li>
         <li css={{ flexGrow: 1 }}>
-          <Section
-            title="Name"
-            labelMarginBottom={0}
-            css={{
-              width: 'fit-content',
-              position: 'relative',
-              label: {
-                position: 'absolute',
-                width: 'fit-content',
-              },
-            }}
-          >
-            <input
-              id={`combatant-${combatant.id}-${'Name'}`}
-              value={combatant.data.name}
-              onChange={e => combatant.ref.update({ name: e.target.value })}
-              css={[
-                {
-                  width: '100%',
-                  border: 'none',
-                  borderBottom: '1px solid darkgrey',
-                  paddingTop: `${50 - 38}px`,
-                  fontSize: ' 2em',
-                  ':focus': {
-                    outline: 'none',
-                    borderBottomColor: 'grey',
-                  },
-                },
-              ]}
-            />
-          </Section>
+          <CombatantName />
         </li>
         <li>
-          <button onClick={() => setDetailsOpen(!detailsOpen)} role="button">
+          <button onClick={() => setDetailsOpen(!detailsOpen)} type="button">
             {detailsOpen ? '^' : 'v'}
           </button>
           <button
             onClick={() => dispatch({ type: 'ADD_WINDOW', ref: combatant.ref })}
-            role="button"
+            type="button"
           >
             □
           </button>
-          <button
-            css={{ marginLeft: 'auto' }}
-            onClick={() => combatant.ref.delete()}
-          >
+          <button type="button" css={{ marginLeft: 'auto' }} onClick={() => combatant.ref.delete()}>
             x
           </button>
         </li>

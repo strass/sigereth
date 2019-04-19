@@ -7,9 +7,9 @@ import useFirestore from '../../hooks/useFirestore';
 import { store } from '../../services/Firestation';
 import CombatantItem from '../molecules/CombatantsList/CombatantItem';
 
-export const CombatantContext = createContext<
-  DocumentSnapshotExpanded<Combatant> | null
->(null);
+export const CombatantContext = createContext(
+  (null as unknown) as DocumentSnapshotExpanded<Combatant>
+);
 
 const CombatantWithContext: FunctionComponent<{
   combatantPath: string;

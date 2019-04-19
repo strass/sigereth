@@ -1,22 +1,7 @@
 // This hook is heavily insprired from https://github.com/FezVrasta/react-popper
-import { useState, useEffect, useRef } from 'react';
-import isEqual from 'lodash/isEqual';
-import PopperJS, { Placement } from 'popper.js';
-
-const useDiffedState = initVal => {
-  const [storedValue, setStoredValue] = useState(initVal);
-
-  const setValue = value => {
-    const valueToStore = value instanceof Function ? value(storedValue) : value;
-    setStoredValue(prevState => {
-      if (isEqual(prevState, valueToStore)) {
-        return prevState;
-      }
-      return valueToStore;
-    });
-  };
-  return [storedValue, setValue];
-};
+import { useState, useEffect, useRef, CSSProperties } from 'react';
+import PopperJS, { Placement, Modifiers, Data } from 'popper.js';
+import useDiffedState from './util/useDiffedState';
 
 const initialMod = {};
 
@@ -24,25 +9,27 @@ const usePopperState: (
   placement: Placement
 ) => [
   {
-    styles: any;
+    styles: CSSProperties;
     placement: PopperJS.Placement;
     outOfBoundaries: boolean;
-    arrowStyles: any;
+    arrowStyles: CSSProperties;
   },
-  (updatedData: any) => any
+  (updatedData: PopperJS.Data) => PopperJS.Data
 ] = placement => {
-  const [currentStyles, setStyles] = useDiffedState({
+  const [currentStyles, setStyles] = useDiffedState<CSSProperties>({
     position: 'absolute',
     top: 0,
     left: 0,
     opacity: 0,
     pointerEvents: 'none',
   });
-  const [currentArrowStyles, setArrowStyles] = useDiffedState({});
+  const [currentArrowStyles, setArrowStyles] = useDiffedState<CSSProperties>(
+    {}
+  );
   const [currentOutOfBoundaries, setOutOfBoundaries] = useState(false);
   const [currentPlacement, setPlacement] = useState(placement);
 
-  const updatePopperState = updatedData => {
+  const updatePopperState = (updatedData: Data) => {
     const {
       styles,
       arrowStyles,
@@ -50,8 +37,8 @@ const usePopperState: (
       placement: updatedPlacement,
     } = updatedData;
 
-    setStyles(styles);
-    setArrowStyles(arrowStyles);
+    setStyles(styles as CSSProperties);
+    setArrowStyles(arrowStyles as CSSProperties);
     setPlacement(updatedPlacement);
     setOutOfBoundaries(hide);
     return updatedData;
@@ -75,9 +62,17 @@ export default ({
   eventsEnabled = true,
   positionFixed = false,
   modifiers = initialMod,
+}: {
+  referenceNode: HTMLElement;
+  popperNode: HTMLElement;
+  arrowNode: HTMLElement;
+  placement: Placement;
+  eventsEnabled: boolean;
+  positionFixed: boolean;
+  modifiers: Modifiers;
 }) => {
   const [popperStyles, updatePopperState] = usePopperState(placement);
-  const popperInstance = useRef<PopperJS>();
+  const popperInstance = useRef<PopperJS | null>();
 
   // manage the popper instance lifecycle
   useEffect(() => {
@@ -109,7 +104,7 @@ export default ({
 
     // eslint-disable-next-line consistent-return
     return () => {
-      popperInstance.current.destroy();
+      popperInstance.current && popperInstance.current.destroy();
       popperInstance.current = null;
     };
   }, [
@@ -119,6 +114,7 @@ export default ({
     placement,
     positionFixed,
     modifiers,
+    updatePopperState,
   ]);
 
   useEffect(() => {
@@ -128,7 +124,7 @@ export default ({
     } else {
       popperInstance.current.disableEventListeners();
     }
-  }, [eventsEnabled, popperInstance.current]);
+  }, [eventsEnabled]);
 
   useEffect(() => {
     if (popperInstance.current) {

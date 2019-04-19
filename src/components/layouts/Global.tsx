@@ -21,12 +21,51 @@ const GlobalLayout: FunctionComponent<{
             },
           },
           { '*, *::after, *::before': { boxSizing: 'border-box' } },
-          { figure: { margin: 0 } },
+          {
+            'html, body, #root': {
+              height: '100%',
+            },
+            '#root': {
+              display: 'flex',
+              flexDirection: 'column',
+            },
+          },
         ]}
       />
-      <header>{header}</header>
-      <main>{main}</main>
-      <footer>{footer}</footer>
+      <header
+        css={{
+          display: 'flex',
+          flexGrow: 0,
+          flexShrink: 0,
+          flexBasis: 'auto',
+          flexDirection: 'column',
+        }}
+      >
+        {header}
+      </header>
+      <main
+        css={{
+          display: 'flex',
+          flexGrow: 1,
+          flexShrink: 1,
+          flexBasis: 'auto',
+          flexDirection: 'column',
+          overflowY: 'auto',
+        }}
+      >
+        {main}
+      </main>
+      <footer
+        css={{
+          display: 'flex',
+          flexGrow: 0,
+          flexShrink: 0,
+          flexBasis: 'auto',
+          flexDirection: 'column',
+        }}
+      >
+        {footer}
+      </footer>
     </Fragment>
   );
 };

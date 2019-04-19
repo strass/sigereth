@@ -12,9 +12,12 @@ import Game from '../../types/Game';
 import Combatant from '../../types/Combatant';
 
 export const GameContext = createContext<{
-  game: DocumentSnapshotExpanded<Game> | null;
-  combatants: QuerySnapshotExpanded<Combatant> | null;
-}>({ game: null, combatants: null });
+  game: DocumentSnapshotExpanded<Game>;
+  combatants: QuerySnapshotExpanded<Combatant>;
+}>({
+  game: (null as unknown) as DocumentSnapshotExpanded<Game>,
+  combatants: (null as unknown) as QuerySnapshotExpanded<Combatant>,
+});
 
 const GameContextProvider: FunctionComponent = ({ children }) => {
   const {

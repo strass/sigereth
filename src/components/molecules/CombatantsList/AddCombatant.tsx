@@ -6,6 +6,7 @@ import Combatant from '../../../types/Combatant';
 import { defaultCombatant } from '../../../types/consts';
 import { toNumber, merge } from 'lodash';
 import NumberSpinner from '../../atoms/NumberSpinner';
+import { getUserRecord } from '../../../services/Firestation';
 
 const AddCombatant: FunctionComponent<{
   combatantsRef: firestore.CollectionReference;
@@ -22,6 +23,7 @@ const AddCombatant: FunctionComponent<{
           name,
           initiative,
           turnOver: false,
+          owner: getUserRecord(),
           motes: {
             personal: null,
             peripheral: null,

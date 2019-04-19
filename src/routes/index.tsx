@@ -11,6 +11,7 @@ import { Fragment } from 'react';
 import DevNotes from '../DevNotes';
 import ErrorBoundary from '../components/atoms/ErrorBoundary';
 import { Link } from 'found';
+import { DiceContextProvider } from '../components/context/DiceContext';
 
 const Router = createBrowserRouter({
   routeConfig: makeRouteConfig(
@@ -31,7 +32,9 @@ const Router = createBrowserRouter({
         main: [
           <Route path="games">
             <Route path=":gameId" Component={GameContextProvider}>
-              <Route path="/" Component={GamePage} />
+              <Route Component={DiceContextProvider}>
+                <Route path="/" Component={GamePage} />
+              </Route>
             </Route>
             <Route
               path="/"
@@ -44,8 +47,9 @@ const Router = createBrowserRouter({
   ),
 
   renderError: ({ error }) => (
-    <div>{error.status === 404 ? 'Not found' : 'Error'}{' '}
-    <Link to="/games/malfeas">to game</Link>
+    <div>
+      {error.status === 404 ? 'Not found' : 'Error'}{' '}
+      <Link to="/games/malfeas">to game</Link>
     </div>
   ),
 });

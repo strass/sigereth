@@ -24,25 +24,11 @@ const CombatantSection: RefForwardingComponent<
     onLabelClick?: (e: MouseEvent<HTMLLabelElement>) => void;
     labelTitle?: string;
   } & HTMLAttributes<HTMLElement>
-> = (
-  {
-    title,
-    labelTitle,
-    labelMarginBottom = 4,
-    children,
-    onLabelClick,
-    ...props
-  },
-  ref
-) => {
+> = ({ title, labelTitle, labelMarginBottom = 4, children, onLabelClick, ...props }, ref) => {
   const combatant = useContext(CombatantContext);
 
   return (
-    <section
-      css={[{ display: 'flex', flexDirection: 'column' }]}
-      {...props}
-      ref={ref}
-    >
+    <section css={[{ display: 'flex', flexDirection: 'column' }]} {...props} ref={ref}>
       <H6Label
         css={[
           textAlignCenter,

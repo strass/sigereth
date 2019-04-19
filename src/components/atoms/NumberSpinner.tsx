@@ -29,6 +29,7 @@ const NumberSpinner: FunctionComponent<{
     'min' | 'id' | 'max' | 'onChange' | 'value' | 'name'
   >;
   className?: string;
+  readOnly?: boolean;
 }> = ({
   value,
   onChange,
@@ -39,12 +40,14 @@ const NumberSpinner: FunctionComponent<{
   max,
   className,
   inputProps,
+  readOnly,
 }) => (
   <React.Fragment>
     <button
       type="button"
-      css={spinnerButtonCss}
+      css={[spinnerButtonCss, readOnly && { visibility: 'hidden' }]}
       onClick={() => onChange({ target: { value: value - 1 } })}
+      disabled={readOnly}
     >
       -
     </button>
@@ -60,6 +63,11 @@ const NumberSpinner: FunctionComponent<{
           fontVariantNumeric: 'tabular-nums',
           textAlign: 'center',
         },
+        readOnly && {
+          outline: 'none',
+          ':focus': { outline: 'none' },
+          cursor: 'default',
+        },
       ]}
       onChange={onChange}
       type="number"
@@ -68,11 +76,13 @@ const NumberSpinner: FunctionComponent<{
       min={min}
       max={max}
       className={className}
+      readOnly={readOnly}
     />
     <button
       type="button"
-      css={spinnerButtonCss}
+      css={[spinnerButtonCss, readOnly && { visibility: 'hidden' }]}
       onClick={() => onChange({ target: { value: value + 1 } })}
+      disabled={readOnly}
     >
       +
     </button>

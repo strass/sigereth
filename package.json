@@ -25,12 +25,20 @@
     "react-collapse": "4.0.3",
     "react-dom": "16.8.6",
     "react-draggable": "3.2.1",
+    "react-hook-thunk-reducer": "^0.0.3",
     "react-motion": "0.5.2",
     "react-new-window": "0.0.12",
     "react-rnd": "9.1.2",
     "react-scripts": "2.1.8"
   },
   "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^1.6.0",
+    "eslint-config-airbnb": "^17.1.0",
+    "eslint-config-prettier": "^4.1.0",
+    "eslint-plugin-prettier": "^3.0.1",
+    "eslint-plugin-react-hooks": "^1.6.0",
+    "now": "^15.0.5",
+    "prettier": "^1.17.0",
     "typescript": "3.4.3"
   },
   "scripts": {

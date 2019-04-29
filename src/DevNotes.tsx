@@ -31,7 +31,9 @@ const DevNotes = () => {
           <li>continue adding usePermissions for combatant sections</li>
           <li>combatantitem refactor into molecules</li>
           <li>configure combatant</li>
-          <li>convert to dotenv setup (firebase)</li>
+          <li>real webpack setup</li>
+          <li>convert to dotenv setup (firebase) https://www.npmjs.com/package/dotenv-webpack</li>
+          <li>sentry</li>
         </ul>
         <h2>bugs</h2>
         <ul>

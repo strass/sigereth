@@ -1,57 +1,96 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import createBrowserRouter from 'found/lib/createBrowserRouter';
-import makeRouteConfig from 'found/lib/makeRouteConfig';
-import Route from 'found/lib/Route';
+import { mount, route, compose, withView } from 'navi';
+// import { Fragment } from 'react';
+import { View } from 'react-navi';
+import { Suspense } from 'react';
 import GameContextProvider from '../components/context/GameContext';
-import GlobalLayout from '../components/layouts/Global';
-import GamePage from '../components/pages/Game';
-import GameHeader from '../components/pages/GameHeader';
-import { Fragment } from 'react';
-import DevNotes from '../DevNotes';
-import ErrorBoundary from '../components/atoms/ErrorBoundary';
-import { Link } from 'found';
 import { DiceContextProvider } from '../components/context/DiceContext';
+import GamePage from '../components/pages/Game';
+import ErrorBoundary from '../components/atoms/ErrorBoundary';
+// import GlobalLayout from '../components/layouts/Global';
+// import GameHeader from '../components/pages/GameHeader';
+// import DevNotes from '../DevNotes';
+// import ErrorBoundary from '../components/atoms/ErrorBoundary';
 
-const Router = createBrowserRouter({
-  routeConfig: makeRouteConfig(
-    <Route path="/" Component={GlobalLayout}>
-      {{
-        header: [
-          <Route Component={ErrorBoundary}>
-            <Route path="games/:gameId" Component={GameContextProvider}>
-              <Route path="/" Component={GameHeader} />
-            </Route>
-          </Route>,
-          <Route
-            path="(.*)?"
-            Component={() => <Fragment>default header</Fragment>}
-          />,
-        ],
-        footer: [<Route path="(.*)?" Component={DevNotes} />],
-        main: [
-          <Route path="games">
-            <Route path=":gameId" Component={GameContextProvider}>
-              <Route Component={DiceContextProvider}>
-                <Route path="/" Component={GamePage} />
-              </Route>
-            </Route>
-            <Route
-              path="/"
-              Component={() => <Fragment>Games Index</Fragment>}
-            />
-          </Route>,
-        ],
-      }}
-    </Route>
-  ),
+const withErrorBoundary = () =>
+  withView(() => (
+    <ErrorBoundary>
+      <View />
+    </ErrorBoundary>
+  ));
 
-  renderError: ({ error }) => (
-    <div>
-      {error.status === 404 ? 'Not found' : 'Error'}{' '}
-      <Link to="/games/malfeas">to game</Link>
-    </div>
-  ),
-});
+const withSuspense = () =>
+  withView(() => (
+    <Suspense fallback="suspsense loading///">
+      <View />
+    </Suspense>
+  ));
 
-export default Router;
+const routes = compose(
+  withErrorBoundary(),
+  withSuspense(),
+  mount({
+    '/': route({
+      title: 'root',
+      getView: () => <div>hi</div>,
+    }),
+    '/games': mount({
+      '/': route({
+        title: 'Games Index',
+        getView: () => <div>games index</div>,
+      }),
+      '/:gameId': compose(
+        withSuspense(),
+        withErrorBoundary(),
+        withSuspense(),
+        withView(req => (
+          <GameContextProvider gameId={req.params.gameId}>
+            <View />
+          </GameContextProvider>
+        )),
+        withView(() => (
+          <DiceContextProvider>
+            <View />
+          </DiceContextProvider>
+        )),
+        route({ title: 'Game', view: <GamePage /> })
+      ),
+    }),
+  })
+);
+
+// const Router = createBrowserRouter({
+//   routeConfig: makeRouteConfig(
+// <Route path="/" Component={GlobalLayout}>
+//   {{
+//     header: [
+//       <Route Component={ErrorBoundary}>
+//         <Route path="games/:gameId" Component={GameContextProvider}>
+//           <Route path="/" Component={GameHeader} />
+//         </Route>
+//       </Route>,
+//       <Route path="(.*)?" Component={() => <Fragment>default header</Fragment>} />,
+//     ],
+//     footer: [<Route path="(.*)?" Component={DevNotes} />],
+//     main: [
+//       <Route path="games">
+//         <Route path=":gameId" Component={GameContextProvider}>
+//           <Route Component={DiceContextProvider}>
+//             <Route path="/" Component={GamePage} />
+//           </Route>
+//         </Route>
+//         <Route path="/" Component={() => <Fragment>Games Index</Fragment>} />
+//       </Route>,
+//     ],
+//   }}
+// </Route>
+//   ),
+//   renderError: ({ error }) => (
+//     <div>
+//       {error.status === 404 ? 'Not found' : 'Error'} <Link to="/games/malfeas">to game</Link>
+//     </div>
+//   ),
+// });
+
+export default routes;

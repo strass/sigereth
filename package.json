@@ -17,8 +17,8 @@
     "@types/react-dom": "16.8.4",
     "@types/react-rnd": "7.4.3",
     "firebase": "5.9.4",
-    "found": "0.4.0-alpha.16",
     "lodash": "4.17.11",
+    "navi": "^0.12.6",
     "polished": "3.2.0",
     "popper.js": "1.15.0",
     "react": "16.8.6",
@@ -27,6 +27,7 @@
     "react-draggable": "3.2.1",
     "react-hook-thunk-reducer": "^0.0.3",
     "react-motion": "0.5.2",
+    "react-navi": "^0.12.6",
     "react-new-window": "0.0.12",
     "react-rnd": "9.1.2",
     "react-scripts": "2.1.8"

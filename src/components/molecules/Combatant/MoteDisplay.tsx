@@ -7,10 +7,6 @@ import Combatant from '../../../types/Combatant';
 import { withoutNumberSpinner } from '../../../styling/input';
 import useCombatantAction from '../../../hooks/useCombatantAction';
 import { MoteType } from '../../../types/Generic';
-import { noMarginPadding } from '../../../styling/normalize';
-import { allSmallCaps, textAlignCenter } from '../../../styling/type';
-import { flexCenter } from '../../../styling/flex';
-import H from '../../atoms/Type/Header';
 import Section from './Section';
 
 const MoteCount: FunctionComponent<{
@@ -56,11 +52,16 @@ const MoteDisplay: FunctionComponent = () => {
   const currentPeripheralInputRef = useRef<HTMLInputElement>(null);
   const combatant = useContext(CombatantContext);
   const dispatch = useCombatantAction();
-  return combatant.data.motes.personal || combatant.data.motes.peripheral ? (
+  const hasMotes =
+    combatant.data.motes && (combatant.data.motes.personal || combatant.data.motes.peripheral);
+  return hasMotes ? (
     <Fragment>
       <Section title="Personal">
         <MoteCount
+          // TODO: Deal with these in a real manner
+          // @ts-ignore
           current={combatant.data.motes.personal.current}
+          // @ts-ignore
           total={combatant.data.motes.personal.total}
           inputRef={currentPersonalInputRef}
           onChange={e =>
@@ -75,7 +76,9 @@ const MoteDisplay: FunctionComponent = () => {
       <Section title="Peripheral">
         <small>3A</small>
         <MoteCount
+          // @ts-ignore
           current={combatant.data.motes.peripheral.current}
+          // @ts-ignore
           total={combatant.data.motes.peripheral.total}
           inputRef={currentPeripheralInputRef}
           onChange={e =>

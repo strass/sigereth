@@ -1,6 +1,7 @@
 import Combatant from './Combatant';
+import { Omit } from '@emotion/styled-base/types/helper';
 
-export const defaultCombatant: Combatant = {
+export const defaultCombatant: Omit<Combatant, 'owner'> = {
   initiative: 3,
   name: 'Harmonious Jade',
   turnOver: false,
@@ -8,12 +9,9 @@ export const defaultCombatant: Combatant = {
   parry: 0,
   dodge: 0,
   notes: '',
+  ignoreOnslaught: false,
 
-  motes: {
-    personal: null,
-    peripheral: null,
-    hasRegainedMotesThisTurn: true,
-  },
+  motes: null,
 
   health: {
     damage: {

@@ -42,10 +42,16 @@ const CombatantSection: RefForwardingComponent<
             },
           },
         ]}
-        onDoubleClick={e => {
-          onLabelClick(e);
-          e.target.control.blur();
-        }}
+        onDoubleClick={
+          onLabelClick
+            ? (e: MouseEvent<HTMLLabelElement>) => {
+                onLabelClick(e);
+                // TODO: Check this out
+                // @ts-ignore
+                e.target.control.blur();
+              }
+            : undefined
+        }
         htmlFor={`combatant-${combatant.id}-${title}`}
         title={labelTitle}
       >

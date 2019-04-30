@@ -1,10 +1,9 @@
 import { useReducer, useEffect, Dispatch, ReducerAction } from 'react';
 import { firestore } from 'firebase';
-import { store, Firebase } from '../services/Firestation';
 import { DocumentSnapshotExpanded, QuerySnapshotExpanded } from '../types/Firestore';
 
 const firestoreReducer = (
-  state: DocumentSnapshotExpanded<any> | QuerySnapshotExpanded<any>,
+  state: DocumentSnapshotExpanded<any> | QuerySnapshotExpanded<any> | null,
   action:
     | { type: 'ON_DOC_SNAPSHOT'; snap: firestore.DocumentSnapshot }
     | { type: 'ON_COLLECTION_SNAPSHOT'; snap: firestore.QuerySnapshot }
@@ -53,18 +52,14 @@ function useFirestore(ref: firestore.DocumentReference | firestore.CollectionRef
   useEffect(() => {
     console.debug(ref ? `subscribing to ${ref.path}` : 'bad ref');
     switch (true) {
-      case !ref: {
-        console.warn('no ref');
-        break;
-      }
       case ref instanceof firestore.DocumentReference: {
-        return (ref as firestore.DocumentReference).onSnapshot(snap => {
+        (ref as firestore.DocumentReference).onSnapshot(snap => {
           dispatch({ type: 'ON_DOC_SNAPSHOT', snap });
         });
         break;
       }
       case ref instanceof firestore.CollectionReference: {
-        return (ref as firestore.CollectionReference).onSnapshot({}, snap => {
+        (ref as firestore.CollectionReference).onSnapshot({}, snap => {
           dispatch({ type: 'ON_COLLECTION_SNAPSHOT', snap });
         });
         break;

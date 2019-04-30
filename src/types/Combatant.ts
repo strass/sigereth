@@ -1,4 +1,4 @@
-import { firestore } from "firebase";
+import { firestore } from 'firebase';
 
 interface MoteCount {
   current: number;
@@ -22,10 +22,10 @@ interface Combatant {
   owner: firestore.DocumentReference;
 
   motes: {
-    personal: MoteCount;
+    personal: MoteCount ;
     peripheral: MoteCount;
     hasRegainedMotesThisTurn: boolean;
-  };
+  } | null;
 
   health: {
     levels: Record<0 | 1 | 2 | 4 | 'I', number>;

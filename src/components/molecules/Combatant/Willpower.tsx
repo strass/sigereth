@@ -1,19 +1,13 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import { useContext, useState } from 'react';
-import { clamp } from 'lodash';
 import { createPortal } from 'react-dom';
 import { CombatantContext } from '../../context/CombatantContext';
-import DotScale from '../../atoms/DotScale';
-import Combatant from '../../../types/Combatant';
-import { unstyleList } from '../../../styling/list';
 import TooltipContext from '../../context/TooltipContext';
 import usePopper from '../../../hooks/usePopper';
 import useHover from '../../../hooks/useHover';
-import { noMarginPadding } from '../../../styling/normalize';
-import { allSmallCaps, textAlignCenter } from '../../../styling/type';
+import { textAlignCenter } from '../../../styling/type';
 import { flexCenter } from '../../../styling/flex';
-import H from '../../atoms/Type/Header';
 import Tooltip from '../../atoms/Tooltip';
 import Section from './Section';
 import usePermissions from '../../../hooks/usePermissions';
@@ -21,16 +15,14 @@ import useCombatantAction from '../../../hooks/useCombatantAction';
 
 const Willpower = () => {
   const { tooltipMount } = useContext(TooltipContext);
-  const [referenceNode, setReferenceNode] = useState(null);
-  const [popperNode, setPopperNode] = useState(null);
-  // const [arrowNode, setArrowNode] = useState(null);
+  const [referenceNode, setReferenceNode] = useState<HTMLElement | null>(null);
+  const [popperNode, setPopperNode] = useState<HTMLElement | null>(null);
   const { hovering, hoverStart, hoverEnd } = useHover(500);
   const combatant = useContext(CombatantContext);
   const { isResourceOwnerOrGameOwner } = usePermissions(combatant);
   const { styles } = usePopper({
     referenceNode: referenceNode || undefined,
     popperNode: popperNode || undefined,
-    // arrowNode,
   });
   const dispatch = useCombatantAction();
 

@@ -3,16 +3,16 @@ import { sample, range, times, flattenDeep } from 'lodash';
 
 const rollD10 = () => sample(range(1, 10)) as number;
 
-const cascadeRoll: (
-  dice: number,
-  reroll?: number[],
-  prev?: number[]
-) => number[] = (dice, reroll = [], prev = []) =>
+const cascadeRoll: (dice: number, reroll?: number[], prev?: number[]) => (number | number[])[] = (
+  dice,
+  reroll = [],
+  prev = []
+) =>
   times(dice, () => {
     const result = rollD10();
     return reroll.includes(result)
-      ? cascadeRoll(1, reroll, [...prev, result])
-      : result;
+      ? (cascadeRoll(1, reroll, [...prev, result]) as number[])
+      : ([result] as number[]);
   });
 
 const countSuccesses = (
@@ -23,19 +23,18 @@ const countSuccesses = (
 ) =>
   roll.reduce(
     (successes, result) =>
-      successes +
-      (result >= targetNumber ? (double.includes(result) ? 2 : 1) : 0),
+      successes + (result >= targetNumber ? (double.includes(result) ? 2 : 1) : 0),
     autosuccesses
   );
 
 const roll: (config: Roll['config']) => Roll['result'] = config => {
   const unflatDiceRolled = cascadeRoll(config.dice, config.reroll);
-  const diceRolled = flattenDeep(unflatDiceRolled);
+  const diceRolled = flattenDeep(unflatDiceRolled) as number[];
   const successes = countSuccesses(diceRolled);
   return {
     successes,
     isBotch: successes === 0 && diceRolled.includes(1),
-    roll: diceRolled,
+    roll: diceRolled as D10Faces[],
   };
 };
 

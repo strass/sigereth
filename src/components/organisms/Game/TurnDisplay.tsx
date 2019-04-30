@@ -17,19 +17,14 @@ const TurnDisplay: FunctionComponent = () => {
         c.ref,
         {
           turnOver: false,
-          ignoreOnslaught:
-            c.data.ignoreOnslaught === 'SCENELONG' ? 'SCENELONG' : false,
+          ignoreOnslaught: c.data.ignoreOnslaught === 'SCENELONG' ? 'SCENELONG' : false,
         } as Combatant,
         { merge: true }
       );
-      batch.set(
-        c.ref,
-        { motes: { hasRegainedMotesThisTurn: false } },
-        { merge: true }
-      );
+      batch.set(c.ref, { motes: { hasRegainedMotesThisTurn: false } }, { merge: true });
     });
     batch.commit();
-  }, [game, game.data.turn, combatants]);
+  }, [game.ref, game.data.turn, combatants]);
 
   return (
     <React.Fragment>

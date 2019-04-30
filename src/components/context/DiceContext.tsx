@@ -66,12 +66,12 @@ export const DiceContextProvider: FunctionComponent = ({ children }) => {
   );
   useEffect(() => {
     return rollsRef && rollsRef.onSnapshot(dispatchSnapshot);
-  }, [game, dispatchSnapshot]);
+  }, [game, dispatchSnapshot, rollsRef]);
 
   const rollDice = useCallback(
     (config: Roll['config']) =>
       rollsRef && rollsRef.add({ config, results: D10.roll(config) }),
-    []
+    [rollsRef]
   );
 
   const value = useMemo(() => ({ state, rollDice }), [state, rollDice]);

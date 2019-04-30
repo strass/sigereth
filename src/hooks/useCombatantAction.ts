@@ -86,7 +86,7 @@ const combatantActionReducer = (
       break;
     }
     default:
-      console.error(`No action handler for action type '${action.type}`);
+      console.error(`No action handler for action type`);
   }
   console.groupEnd();
   return batch.commit();

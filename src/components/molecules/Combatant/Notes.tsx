@@ -1,6 +1,6 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React, { FunctionComponent, useContext } from 'react';
+import { FunctionComponent, useContext } from 'react';
 import { CombatantContext } from '../../context/CombatantContext';
 import { noMarginPadding } from '../../../styling/normalize';
 import { allSmallCaps } from '../../../styling/type';
@@ -15,9 +15,7 @@ const CombatantNotes: FunctionComponent = () => {
       <textarea
         css={{ width: '100%' }}
         value={combatant.data.notes}
-        onChange={e =>
-          combatant.ref.set({ notes: e.target.value }, { merge: true })
-        }
+        onChange={e => combatant.ref.set({ notes: e.target.value }, { merge: true })}
       />
     </label>
   );

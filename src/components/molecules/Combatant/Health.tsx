@@ -18,15 +18,13 @@ import CombatantSection, { H6Label } from './Section';
 import Tooltip from '../../atoms/Tooltip';
 
 const CombatantHealth: FunctionComponent = () => {
-  const [referenceNode, setReferenceNode] = useState(null);
-  const [popperNode, setPopperNode] = useState(null);
-  const [arrowNode, setArrowNode] = useState(null);
+  const [referenceNode, setReferenceNode] = useState<HTMLElement | null>(null);
+  const [popperNode, setPopperNode] = useState<HTMLElement | null>(null);
   const combatant = useContext(CombatantContext);
   const { hovering, hoverStart, hoverEnd } = useHover(500);
-  const { styles, placement, outOfBoundaries, arrowStyles } = usePopper({
-    referenceNode,
-    popperNode,
-    arrowNode,
+  const { styles } = usePopper({
+    referenceNode: referenceNode || undefined,
+    popperNode: popperNode || undefined,
   });
   const dispatch = useCombatantAction();
   const totalDamage = reduce(
@@ -64,7 +62,7 @@ const CombatantHealth: FunctionComponent = () => {
           <Tooltip isOpen={hovering} ref={setPopperNode} css={[styles, { minHeight: 60 }]}>
             <H6Label css={[noMarginPadding, allSmallCaps, textAlignCenter]}>Health Levels</H6Label>
             <ol css={[unstyleList, horizontalList]}>
-              {damageLevelKeys.map((key: 0 | 1 | 2 | 4 | 'I', woundLevelIndex, levels) => (
+              {damageLevelKeys.map((key, woundLevelIndex, levels) => (
                 <li key={`health-${key}`} css={{ ':not(:last-child)': { marginRight: 4 } }}>
                   <label>
                     <h6 css={[noMarginPadding, allSmallCaps, textAlignCenter]}>
@@ -74,10 +72,12 @@ const CombatantHealth: FunctionComponent = () => {
                   </label>
                   <ul css={[unstyleList, horizontalList]}>
                     {times(combatant.data.health.levels[key], i => {
-                      const previousLevels = levels
+                      const previousLevels: number = levels
                         .slice(0, woundLevelIndex)
                         .reduce(
-                          (acc, woundLevelKey) => acc + combatant.data.health.levels[woundLevelKey],
+                          (acc: number, woundLevelKey) =>
+                            (acc +
+                              (combatant.data.health.levels[woundLevelKey] as number)) as number,
                           0
                         );
                       return (
@@ -208,7 +208,7 @@ const CombatantHealth: FunctionComponent = () => {
               </ul>
             </div>
           </Tooltip>,
-          document.querySelector('body')
+          document.querySelector('body') as HTMLElement
         )}
       </Fragment>
     </CombatantSection>

@@ -1,8 +1,7 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React, { FunctionComponent, useState, useCallback, FormEvent } from 'react';
+import { FunctionComponent, useState, useCallback, FormEvent } from 'react';
 import { firestore } from 'firebase';
-import Combatant from '../../../types/Combatant';
 import { defaultCombatant } from '../../../types/consts';
 import { toNumber, merge } from 'lodash';
 import NumberSpinner from '../../atoms/NumberSpinner';
@@ -29,13 +28,13 @@ const AddCombatant: FunctionComponent<{
             peripheral: null,
             hasRegainedMotesThisTurn: true,
           },
-        } as Combatant)
+        })
       );
       setName('');
       setInitiative(3);
       setDisabled(false);
     },
-    [combatantsRef.path, name, initiative]
+    [name, initiative, combatantsRef]
   );
   return (
     <form onSubmit={addCombatant}>

@@ -1,6 +1,5 @@
-import styled, { StyledComponent } from '@emotion/styled';
+import styled from '@emotion/styled';
 import { modularScale } from 'polished';
-import { DetailedHTMLProps, HTMLAttributes } from 'react';
 import { FontFamily } from './fonts';
 import { noMarginPadding } from '../../../styling/normalize';
 import { allSmallCaps } from '../../../styling/type';
@@ -21,11 +20,7 @@ const H2 = styled(Header)([{ fontSize: modularScale(4, '1rem', 'majorSecond') }]
 const H3 = styled(Header)([{ fontSize: modularScale(3, '1rem', 'majorSecond') }]);
 const H4 = styled(Header)([{ fontSize: modularScale(2, '1rem', 'majorSecond') }]);
 const H5 = styled(Header)([{ fontSize: modularScale(1, '1rem', 'majorSecond') }]);
-const H6: StyledComponent<
-  DetailedHTMLProps<HTMLAttributes<HTMLHeadElement>, HTMLHeadElement>,
-  { children: string },
-  never
-> = styled(Header.withComponent('h6'))([
+const H6 = styled(Header.withComponent('h6'))([
   {
     fontSize: modularScale(0, '1rem', 'majorSecond'),
     lineHeight: modularScale(0, '1rem', 'majorSecond'),

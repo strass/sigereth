@@ -31,7 +31,7 @@ type WindowReducerState = DraggableWindow[];
 interface WindowContextState {
   windows: WindowReducerState;
   dispatch: Dispatch<ReducerAction<typeof windowReducer>>;
-  windowMount: HTMLElement;
+  windowMount: HTMLElement | null;
 }
 
 type WindowReducerAction = { type: string } & (
@@ -52,35 +52,26 @@ type WindowReducerAction = { type: string } & (
       path: firestore.DocumentReference['path'];
     });
 
-const windowReducer = (
-  state: WindowReducerState,
-  action: WindowReducerAction
-) => {
+const windowReducer = (state: WindowReducerState, action: WindowReducerAction) => {
   switch (action.type) {
     case 'ADD_WINDOW':
-      const pathAlreadyOpen = !!state.find(
-        dw => dw.ref.path === action.ref.path
-      );
+      const pathAlreadyOpen = !!state.find(dw => dw.ref.path === action.ref.path);
       return pathAlreadyOpen
         ? state
         : [...state, { ref: action.ref, open: false } as DraggableWindow];
     case 'REMOVE_WINDOW':
       return reject(state, dw => action.path === dw.ref.path);
     case 'POP_OUT':
-      return map(state, dw =>
-        action.path === dw.ref.path ? { ...dw, open: true } : dw
-      );
+      return map(state, dw => (action.path === dw.ref.path ? { ...dw, open: true } : dw));
     case 'SHRINK':
-      return map(state, dw =>
-        action.path === dw.ref.path ? { ...dw, open: false } : dw
-      );
+      return map(state, dw => (action.path === dw.ref.path ? { ...dw, open: false } : dw));
     default:
       return state;
   }
 };
 
 export const WindowContextProvider: FunctionComponent = ({ children }) => {
-  const [windowMount, setWindowMount] = useState<HTMLElement>(null);
+  const [windowMount, setWindowMount] = useState<HTMLElement | null>(null);
   const [windows, dispatch] = useReducer(windowReducer, []);
   const value = useMemo(() => ({ windows, dispatch, windowMount }), [
     windows,

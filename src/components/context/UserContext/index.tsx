@@ -1,6 +1,6 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { createContext, FunctionComponent, useState, useEffect } from 'react';
+import { createContext, FunctionComponent, useState, useEffect, Fragment } from 'react';
 import { auth, firestore } from 'firebase';
 import { getUserRecord, store } from '../../../services/Firestation';
 import useFirestore from '../../../hooks/useFirestore';
@@ -11,7 +11,6 @@ const UserContext = createContext<DocumentSnapshotExpanded<User> | null>(null);
 
 export const UserContextProvider: FunctionComponent = ({ children }) => {
   const [userRef, setUserRef] = useState(getUserRecord());
-  const [user] = useFirestore<User>(userRef);
   useEffect(
     () =>
       auth().onAuthStateChanged(async newUser => {
@@ -21,15 +20,27 @@ export const UserContextProvider: FunctionComponent = ({ children }) => {
             .get();
           if (userRecord.exists) {
             setUserRef(userRecord.ref);
-            return true;
           }
         } else {
           setUserRef(null);
-          return false;
         }
+        return true;
       }),
     []
   );
+  return userRef ? (
+    <UserContextProviderWithoutAuthWait userRef={userRef}>
+      {children}
+    </UserContextProviderWithoutAuthWait>
+  ) : (
+    <Fragment>Signing in</Fragment>
+  );
+};
+
+export const UserContextProviderWithoutAuthWait: FunctionComponent<{
+  userRef: firestore.DocumentReference;
+}> = ({ children, userRef }) => {
+  const [user] = useFirestore<User>(userRef);
   return <UserContext.Provider value={user}>{children}</UserContext.Provider>;
 };
 

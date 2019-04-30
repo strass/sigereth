@@ -2,7 +2,6 @@
 import { jsx } from '@emotion/core';
 import { FunctionComponent, useContext, memo, useState } from 'react';
 import { Collapse } from 'react-collapse';
-import CheckboxAtom from '../../atoms/Checkbox';
 import MoteDisplay from './MoteDisplay';
 import Willpower from './Willpower';
 import Onslaught from './Onslaught';

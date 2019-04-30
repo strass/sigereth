@@ -1,14 +1,8 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { useContext } from 'react';
-import { CombatantContext } from '../../context/CombatantContext';
-import { toNumber } from 'lodash';
-import NumberSpinner from '../../atoms/NumberSpinner';
-import Section from './Section';
 
 const CombatantConfigure = () => {
-  const combatant = useContext(CombatantContext);
-  const sectionTitle = 'Onslaught';
+  // const combatant = useContext(CombatantContext);
   return (
     <div>
       <ul>

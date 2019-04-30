@@ -8,7 +8,7 @@ export enum DamageType {
   LETHAL = 'lethal',
   AGGRAVATED = 'aggravated',
 }
-export const damageLevelKeys = [0, 1, 2, 4, 'I'];
+export const damageLevelKeys: (string | number)[] = [0, 1, 2, 4, 'I'];
 
 export enum Attribute {
   STRENGTH = 'strength',

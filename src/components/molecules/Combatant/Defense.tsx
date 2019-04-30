@@ -4,9 +4,8 @@ import { FunctionComponent, Fragment, useState } from 'react';
 import { useContext } from 'react';
 import { createPortal } from 'react-dom';
 import { toNumber } from 'lodash';
-import { noMarginPadding } from '../../../styling/normalize';
 import { flexCenter } from '../../../styling/flex';
-import { allSmallCaps, textAlignCenter } from '../../../styling/type';
+import { textAlignCenter } from '../../../styling/type';
 import { CombatantContext } from '../../context/CombatantContext';
 import usePopper from '../../../hooks/usePopper';
 import NumberSpinner from '../../atoms/NumberSpinner';
@@ -15,19 +14,18 @@ import useHover from '../../../hooks/useHover';
 import Tooltip from '../../atoms/Tooltip';
 import CombatantSection, { H6Label } from './Section';
 import Section from './Section';
-import Combatant from '../../../types/Combatant';
+import TooltipContext from '../../context/TooltipContext';
 import useCombatantAction from '../../../hooks/useCombatantAction';
 
 const CombatantDefense: FunctionComponent = () => {
-  const [referenceNode, setReferenceNode] = useState(null);
-  const [popperNode, setPopperNode] = useState(null);
-  const [arrowNode, setArrowNode] = useState(null);
+  const { tooltipMount } = useContext(TooltipContext);
+  const [referenceNode, setReferenceNode] = useState<HTMLElement | null>(null);
+  const [popperNode, setPopperNode] = useState<HTMLElement | null>(null);
   const { hovering, hoverStart, hoverEnd } = useHover(500);
   const combatant = useContext(CombatantContext);
-  const { styles, placement, outOfBoundaries, arrowStyles } = usePopper({
-    referenceNode,
-    popperNode,
-    arrowNode,
+  const { styles } = usePopper({
+    referenceNode: referenceNode || undefined,
+    popperNode: popperNode || undefined,
   });
   const dispatch = useCombatantAction();
 
@@ -151,7 +149,7 @@ const CombatantDefense: FunctionComponent = () => {
             )}
           </Fragment>
         </Tooltip>,
-        document.querySelector('body')
+        tooltipMount as HTMLElement
       )}
     </CombatantSection>
   );

@@ -1,6 +1,6 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React, {
+import {
   createContext,
   FunctionComponent,
   useCallback,
@@ -58,11 +58,10 @@ export const TooltipContextProvider: FunctionComponent = ({ children }) => {
           return state;
       }
     },
-    {}
+    // TODO: try to remove this?
+    ({} as unknown) as never
   );
-  const [tooltipMountRef, setTooltipMountRef] = useState<HTMLElement | null>(
-    null
-  );
+  const [tooltipMountRef, setTooltipMountRef] = useState<HTMLElement | null>(null);
 
   const subscribeTooltip = useCallback((hideTooltip: () => void) => {
     const id = uniqueId('tooltip_');

@@ -1,7 +1,8 @@
 // This hook is heavily insprired from https://github.com/FezVrasta/react-popper
-import { useState, useEffect, useRef, CSSProperties } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import PopperJS, { Placement, Modifiers, Data } from 'popper.js';
 import useDiffedState from './util/useDiffedState';
+import { Interpolation } from '@emotion/css';
 
 const initialMod = {};
 
@@ -9,36 +10,29 @@ const usePopperState: (
   placement: Placement
 ) => [
   {
-    styles: CSSProperties;
+    styles: Interpolation;
     placement: PopperJS.Placement;
     outOfBoundaries: boolean;
-    arrowStyles: CSSProperties;
+    arrowStyles: Interpolation;
   },
   (updatedData: PopperJS.Data) => PopperJS.Data
 ] = placement => {
-  const [currentStyles, setStyles] = useDiffedState<CSSProperties>({
+  const [currentStyles, setStyles] = useDiffedState<Interpolation>({
     position: 'absolute',
     top: 0,
     left: 0,
     opacity: 0,
     pointerEvents: 'none',
   });
-  const [currentArrowStyles, setArrowStyles] = useDiffedState<CSSProperties>(
-    {}
-  );
+  const [currentArrowStyles, setArrowStyles] = useDiffedState<Interpolation>({});
   const [currentOutOfBoundaries, setOutOfBoundaries] = useState(false);
   const [currentPlacement, setPlacement] = useState(placement);
 
   const updatePopperState = (updatedData: Data) => {
-    const {
-      styles,
-      arrowStyles,
-      hide,
-      placement: updatedPlacement,
-    } = updatedData;
+    const { styles, arrowStyles, hide, placement: updatedPlacement } = updatedData;
 
-    setStyles(styles as CSSProperties);
-    setArrowStyles(arrowStyles as CSSProperties);
+    setStyles((styles as unknown) as Interpolation);
+    setArrowStyles((arrowStyles as unknown) as Interpolation);
     setPlacement(updatedPlacement);
     setOutOfBoundaries(hide);
     return updatedData;
@@ -63,13 +57,13 @@ export default ({
   positionFixed = false,
   modifiers = initialMod,
 }: {
-  referenceNode: HTMLElement;
-  popperNode: HTMLElement;
-  arrowNode: HTMLElement;
-  placement: Placement;
-  eventsEnabled: boolean;
-  positionFixed: boolean;
-  modifiers: Modifiers;
+  referenceNode?: HTMLElement;
+  popperNode?: HTMLElement;
+  arrowNode?: HTMLElement;
+  placement?: Placement;
+  eventsEnabled?: boolean;
+  positionFixed?: boolean;
+  modifiers?: Modifiers;
 }) => {
   const [popperStyles, updatePopperState] = usePopperState(placement);
   const popperInstance = useRef<PopperJS | null>();

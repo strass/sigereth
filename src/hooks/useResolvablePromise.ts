@@ -1,13 +1,13 @@
 import { useRef } from 'react';
 
 const useResolvablePromise = (): [Promise<any>, () => void] => {
-  const resolve = useRef<() => void | null>(null);
+  let { current: resolve } = useRef<() => void | null>(null);
   const promise = useRef(
     new Promise(res => {
-      resolve.current = res;
+      resolve = res;
     })
   );
-  return [promise.current, resolve.current as () => void];
+  return [promise.current, resolve as () => void];
 };
 
 export default useResolvablePromise;

@@ -13,7 +13,7 @@ const config = {
 };
 
 try {
-  const app = firebase.initializeApp(config);
+  firebase.initializeApp(config);
   firebase
     .auth()
     .signInAnonymously()

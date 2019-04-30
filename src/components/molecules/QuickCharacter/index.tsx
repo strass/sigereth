@@ -1,30 +1,29 @@
 /** @jsx jsx */
-import { jsx, Interpolation } from '@emotion/core';
+import { jsx } from '@emotion/core';
 import { unstyleList } from '../../../styling/list';
 import H from '../../atoms/Type/Header';
 import { SheetValueGroup } from '../../atoms/SheetValue';
 import ActionsList from '../../atoms/ActionsList';
-import DiceRoll from '../../atoms/DiceRoll';
 
 // const qc = { data: {} };
-const dl: Interpolation = {
-  display: 'flex',
-  dt: {
-    fontWeight: 'bold',
-  },
-  dd: {
-    margin: 0,
-    ':not(:last-child)': { marginLeft: 2, marginRight: 2 },
-  },
-};
-const inlineDl: Interpolation = {
-  dt: {
-    display: 'inline-flex',
-  },
-  dd: {
-    display: 'inline-flex',
-  },
-};
+// const dl: Interpolation = {
+//   display: 'flex',
+//   dt: {
+//     fontWeight: 'bold',
+//   },
+//   dd: {
+//     margin: 0,
+//     ':not(:last-child)': { marginLeft: 2, marginRight: 2 },
+//   },
+// };
+// const inlineDl: Interpolation = {
+//   dt: {
+//     display: 'inline-flex',
+//   },
+//   dd: {
+//     display: 'inline-flex',
+//   },
+// };
 
 const QuickCharacter = () => {
   return (
@@ -42,10 +41,7 @@ const QuickCharacter = () => {
       </div>
       <div>
         <SheetValueGroup
-          values={[
-            { label: 'Personal', value: 16 },
-            { label: 'Peripheral', value: 32 },
-          ]}
+          values={[{ label: 'Personal', value: 16 }, { label: 'Peripheral', value: 32 }]}
         />
       </div>
       <div>
@@ -57,7 +53,7 @@ const QuickCharacter = () => {
                 dice: 10,
                 excellency: {
                   maxExcellency: 2,
-                  unit: 'SUCCESSES',
+                  unit: 'SUCCESSES' as 'SUCCESSES',
                   motesPerUnit: 2,
                 },
               },
@@ -68,7 +64,7 @@ const QuickCharacter = () => {
                 dice: 11,
                 excellency: {
                   maxExcellency: 6,
-                  unit: 'DICE',
+                  unit: 'DICE' as 'DICE',
                   motesPerUnit: 1,
                 },
               },
@@ -85,7 +81,7 @@ const QuickCharacter = () => {
                 dice: 7,
                 excellency: {
                   maxExcellency: 1,
-                  unit: 'SUCCESS',
+                  unit: 'SUCCESS' as 'SUCCESSES',
                   motesPerUnit: 2,
                 },
               },
@@ -96,7 +92,7 @@ const QuickCharacter = () => {
                 dice: 8,
                 excellency: {
                   maxExcellency: 2,
-                  unit: 'SUCCESS',
+                  unit: 'SUCCESS' as 'SUCCESSES',
                   motesPerUnit: 2,
                 },
               },
@@ -107,7 +103,7 @@ const QuickCharacter = () => {
                 dice: 9,
                 excellency: {
                   maxExcellency: 5,
-                  unit: 'DICE',
+                  unit: 'DICE' as 'DICE',
                   motesPerUnit: 1,
                 },
               },
@@ -118,7 +114,7 @@ const QuickCharacter = () => {
                 dice: 10,
                 excellency: {
                   maxExcellency: 2,
-                  unit: 'SUCCESS',
+                  unit: 'SUCCESS' as 'SUCCESSES',
                   motesPerUnit: 2,
                 },
               },
@@ -129,7 +125,7 @@ const QuickCharacter = () => {
                 dice: 11,
                 excellency: {
                   maxExcellency: 6,
-                  unit: 'DICE',
+                  unit: 'DICE' as 'DICE',
                   motesPerUnit: 1,
                 },
               },
@@ -167,10 +163,7 @@ const QuickCharacter = () => {
           Combat
         </H.H6>
         <ul css={[unstyleList]}>
-          <li>
-            Attack (Sword of Sorrows, jade daiklave): 12 dice (+5 for 5m, Damage
-            14L/5)
-          </li>
+          <li>Attack (Sword of Sorrows, jade daiklave): 12 dice (+5 for 5m, Damage 14L/5)</li>
           <li>Attack (Unarmed): 12 dice (+4 for 4m, Damage 9B)</li>
         </ul>
       </section>
@@ -188,13 +181,10 @@ const QuickCharacter = () => {
         </H.H6>
         <ul css={[unstyleList]}>
           <li>
-            Defining Principle: I alone deserve to be Empress; I alone can
-            restore the Realm's glory.
+            Defining Principle: I alone deserve to be Empress; I alone can restore the Realm's
+            glory.
           </li>
-          <li>
-            Defining Principle: My devotion to the Immaculate Philosophy is
-            unwavering.
-          </li>
+          <li>Defining Principle: My devotion to the Immaculate Philosophy is unwavering.</li>
           <li>Defining Tie: House Mnemon (Authoritarian Pride)</li>
           <li>Major Principle: I crave the secrets of the First Age.</li>
           <li>Major Tie: The Scarlet Empress (Admiration)</li>

@@ -1,6 +1,6 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React, { FunctionComponent, InputHTMLAttributes } from 'react';
+import React, { FunctionComponent, InputHTMLAttributes, ChangeEvent } from 'react';
 import { Omit } from 'lodash';
 import { withoutNumberSpinner as withoutNumberSpinnerCss } from '../../styling/input';
 
@@ -50,7 +50,10 @@ const NumberSpinner: FunctionComponent<{
     <button
       type="button"
       css={[spinnerButtonCss, readOnly && { visibility: 'hidden' }]}
-      onClick={() => onChange({ target: { value: value - 1 } })}
+      onClick={() =>
+        onChange &&
+        onChange(({ target: { value: value - 1 } } as unknown) as ChangeEvent<HTMLInputElement>)
+      }
       disabled={readOnly || value === min}
     >
       -
@@ -85,7 +88,10 @@ const NumberSpinner: FunctionComponent<{
     <button
       type="button"
       css={[spinnerButtonCss, readOnly && { visibility: 'hidden' }]}
-      onClick={() => onChange({ target: { value: value + 1 } })}
+      onClick={() =>
+        onChange &&
+        onChange(({ target: { value: value + 1 } } as unknown) as ChangeEvent<HTMLInputElement>)
+      }
       disabled={readOnly || value === max}
     >
       +

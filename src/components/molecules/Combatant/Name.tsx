@@ -4,10 +4,12 @@ import { FunctionComponent, useContext } from 'react';
 import Section from './Section';
 import { CombatantContext } from '../../context/CombatantContext';
 import usePermissions from '../../../hooks/usePermissions';
+import useCombatantAction from '../../../hooks/useCombatantAction';
 
 const CombatantName: FunctionComponent = () => {
   const combatant = useContext(CombatantContext);
   const { isResourceOwnerOrGameOwner } = usePermissions(combatant);
+  const dispatch = useCombatantAction();
   return (
     <Section
       title="Name"
@@ -25,7 +27,7 @@ const CombatantName: FunctionComponent = () => {
         readOnly={!isResourceOwnerOrGameOwner}
         id={`combatant-${combatant.id}-${'Name'}`}
         value={combatant.data.name}
-        onChange={e => combatant.ref.update({ name: e.target.value })}
+        onChange={e => dispatch({ type: 'SET_NAME', name: e.target.value })}
         css={[
           {
             width: '100%',

@@ -5,11 +5,11 @@ import Combatant from '../../types/Combatant';
 import { DocumentSnapshotExpanded } from '../../types/Firestore';
 import useFirestore from '../../hooks/useFirestore';
 import { store } from '../../services/Firestation';
-import CombatantItem from '../molecules/CombatantsList/CombatantItem';
+import CombatantItem from '../molecules/Combatant';
 
-export const CombatantContext = createContext(
-  (null as unknown) as DocumentSnapshotExpanded<Combatant>
-);
+export const CombatantContext = createContext((null as unknown) as DocumentSnapshotExpanded<
+  Combatant
+>);
 
 const CombatantWithContext: FunctionComponent<{
   combatantPath: string;
@@ -21,11 +21,7 @@ const CombatantWithContext: FunctionComponent<{
   const [combatant] = useFirestore<Combatant>(combatantRef);
   return (
     <CombatantContext.Provider value={combatant}>
-      {!!combatant ? (
-        <CombatantItem isActive={isActive} />
-      ) : (
-        <span>Loading...</span>
-      )}
+      {combatant ? <CombatantItem isActive={isActive} /> : <span>Loading...</span>}
     </CombatantContext.Provider>
   );
 };

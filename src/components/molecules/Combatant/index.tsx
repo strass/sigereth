@@ -2,20 +2,20 @@
 import { jsx } from '@emotion/core';
 import { FunctionComponent, useContext, memo, useState } from 'react';
 import { Collapse } from 'react-collapse';
-import Combatant from '../../../types/Combatant';
 import CheckboxAtom from '../../atoms/Checkbox';
-import MoteDisplay from '../Combatant/MoteDisplay';
-import Willpower from '../Combatant/Willpower';
-import Onslaught from '../Combatant/Onslaught';
-import Health from '../Combatant/Health';
-import Defense from '../Combatant/Defense';
-import Initiative from '../Combatant/Initiative';
-import Notes from '../Combatant/Notes';
+import MoteDisplay from './MoteDisplay';
+import Willpower from './Willpower';
+import Onslaught from './Onslaught';
+import Health from './Health';
+import Defense from './Defense';
+import Initiative from './Initiative';
+import Notes from './Notes';
 import { CombatantContext } from '../../context/CombatantContext';
 import { horizontalList, unstyleList } from '../../../styling/list';
 import { flexCenter } from '../../../styling/flex';
 import WindowContext from '../../context/WindowContext';
-import CombatantName from '../Combatant/Name';
+import CombatantName from './Name';
+import CombatantAvatar from './Avatar';
 
 const CombatantItem: FunctionComponent<{ isActive: boolean }> = ({ isActive }) => {
   const { dispatch } = useContext(WindowContext);
@@ -61,14 +61,7 @@ const CombatantItem: FunctionComponent<{ isActive: boolean }> = ({ isActive }) =
             },
           ]}
         >
-          <CheckboxAtom
-            checked={combatant.data.turnOver}
-            onChange={e => {
-              combatant.ref.update({
-                turnOver: !combatant.data.turnOver,
-              } as Partial<Combatant>);
-            }}
-          />
+          <CombatantAvatar />
         </li>
         <li css={{ display: 'flex' }}>
           <Initiative />

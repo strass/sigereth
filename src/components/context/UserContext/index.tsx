@@ -1,11 +1,11 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import { createContext, FunctionComponent, useState, useEffect } from 'react';
-import { getUserRecord, store } from '../../services/Firestation';
-import useFirestore from '../../hooks/useFirestore';
-import User from '../../types/User';
 import { auth, firestore } from 'firebase';
-import { DocumentSnapshotExpanded } from '../../types/Firestore';
+import { getUserRecord, store } from '../../../services/Firestation';
+import useFirestore from '../../../hooks/useFirestore';
+import User from '../../../types/User';
+import { DocumentSnapshotExpanded } from '../../../types/Firestore';
 
 const UserContext = createContext<DocumentSnapshotExpanded<User> | null>(null);
 
@@ -27,7 +27,6 @@ export const UserContextProvider: FunctionComponent = ({ children }) => {
           setUserRef(null);
           return false;
         }
-        return;
       }),
     []
   );

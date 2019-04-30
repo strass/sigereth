@@ -17,6 +17,7 @@ import H from '../../atoms/Type/Header';
 import Tooltip from '../../atoms/Tooltip';
 import Section from './Section';
 import usePermissions from '../../../hooks/usePermissions';
+import useCombatantAction from '../../../hooks/useCombatantAction';
 
 const Willpower = () => {
   const { tooltipMount } = useContext(TooltipContext);
@@ -31,6 +32,7 @@ const Willpower = () => {
     popperNode: popperNode || undefined,
     // arrowNode,
   });
+  const dispatch = useCombatantAction();
 
   return (
     <Section
@@ -51,9 +53,30 @@ const Willpower = () => {
       {isResourceOwnerOrGameOwner &&
         createPortal(
           <Tooltip ref={setPopperNode} css={[styles, { flexDirection: 'row' }]} isOpen={hovering}>
-            <button type="button">+1</button>
-            <button type="button">-1</button>
-            <button type="button">Reset to Full</button>
+            <button
+              type="button"
+              onClick={() =>
+                dispatch({
+                  type: 'SET_WILLPOWER',
+                  willpower: combatant.data.willpower.temporary + 1,
+                })
+              }
+              disabled={combatant.data.willpower.temporary >= 10}
+            >
+              +1
+            </button>
+            <button
+              type="button"
+              onClick={() =>
+                dispatch({
+                  type: 'SET_WILLPOWER',
+                  willpower: combatant.data.willpower.temporary - 1,
+                })
+              }
+              disabled={combatant.data.willpower.temporary < 1}
+            >
+              -1
+            </button>
           </Tooltip>,
           tooltipMount as Element
         )}

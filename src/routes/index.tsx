@@ -3,15 +3,14 @@ import { jsx } from '@emotion/core';
 import { mount, route, compose, withView } from 'navi';
 // import { Fragment } from 'react';
 import { View } from 'react-navi';
-import { Suspense } from 'react';
+import { Suspense, Fragment } from 'react';
 import GameContextProvider from '../components/context/GameContext';
 import { DiceContextProvider } from '../components/context/DiceContext';
 import GamePage from '../components/pages/Game';
 import ErrorBoundary from '../components/atoms/ErrorBoundary';
-// import GlobalLayout from '../components/layouts/Global';
+import GlobalLayout from '../components/layouts/Global';
+import DevNotes from '../DevNotes';
 // import GameHeader from '../components/pages/GameHeader';
-// import DevNotes from '../DevNotes';
-// import ErrorBoundary from '../components/atoms/ErrorBoundary';
 
 const withErrorBoundary = () =>
   withView(() => (
@@ -30,6 +29,9 @@ const withSuspense = () =>
 const routes = compose(
   withErrorBoundary(),
   withSuspense(),
+  withView(
+    <GlobalLayout header={<Fragment>header</Fragment>} footer={<DevNotes />} main={<View />} />
+  ),
   mount({
     '/': route({
       title: 'root',
@@ -41,19 +43,16 @@ const routes = compose(
         getView: () => <div>games index</div>,
       }),
       '/:gameId': compose(
-        withSuspense(),
-        withErrorBoundary(),
-        withSuspense(),
         withView(req => (
           <GameContextProvider gameId={req.params.gameId}>
             <View />
           </GameContextProvider>
         )),
-        withView(() => (
+        withView(
           <DiceContextProvider>
             <View />
           </DiceContextProvider>
-        )),
+        ),
         route({ title: 'Game', view: <GamePage /> })
       ),
     }),

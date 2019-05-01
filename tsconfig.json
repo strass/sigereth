@@ -3,13 +3,7 @@
     "outDir": "dist",
     "module": "esnext",
     "target": "es6",
-    "lib": [
-      "es5",
-      "es6",
-      "es7",
-      "es2017",
-      "dom"
-    ],
+    "lib": ["es5", "es6", "es7", "es2015", "es2017", "esnext", "dom"],
     "sourceMap": true,
     "allowJs": false,
     "jsx": "preserve",
@@ -22,7 +16,6 @@
     "strictNullChecks": true,
     "suppressImplicitAnyIndexErrors": true,
     "noUnusedLocals": true,
-    "declaration": true,
     "allowSyntheticDefaultImports": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
@@ -30,15 +23,9 @@
     "esModuleInterop": true,
     "strict": true,
     "resolveJsonModule": true,
-    "isolatedModules": true,
-    "noEmit": true
+    "noEmit": true,
+    "isolatedModules": true
   },
-  "include": [
-    "./**/*"
-  ],
-  "exclude": [
-    "node_modules",
-    "dist",
-    "scripts"
-  ]
+  "include": ["./**/*"],
+  "exclude": ["node_modules", "dist", "scripts"]
 }

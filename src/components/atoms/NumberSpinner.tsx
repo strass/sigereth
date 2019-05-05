@@ -1,10 +1,10 @@
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
+import { jsx, Interpolation } from '@emotion/core';
 import React, { FunctionComponent, InputHTMLAttributes, ChangeEvent } from 'react';
 import { Omit } from 'lodash';
 import { withoutNumberSpinner as withoutNumberSpinnerCss } from '../../styling/input';
 
-const spinnerButtonCss = {
+const spinnerButtonCss: Interpolation = {
   borderRadius: '50%',
   border: '1px solid transparent',
   margin: 0,
@@ -14,6 +14,7 @@ const spinnerButtonCss = {
   display: 'inline-flex',
   justifyContent: 'center',
   alignItems: 'center',
+  userSelect: 'none',
   ':disabled': {
     background: 'white',
     borderColor: 'lightgrey',

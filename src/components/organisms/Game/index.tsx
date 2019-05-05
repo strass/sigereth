@@ -1,18 +1,24 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React, { FunctionComponent, useContext } from 'react';
+import { FunctionComponent, useContext } from 'react';
 import CombatantsList from '../../molecules/CombatantsList';
 import TurnDisplay from './TurnDisplay';
 import { GameContext } from '../../context/GameContext';
+import RollerOrganism from '../Roller';
+import EventFeedOrganism from './EventFeed';
 
 const GameOrganism: FunctionComponent = () => {
   const { game } = useContext(GameContext);
   return (
-    <React.Fragment>
-      <h1>{game.id}</h1>
-      <TurnDisplay />
-      <CombatantsList />
-    </React.Fragment>
+    <div css={{ display: 'flex', flexDirection: 'row' }}>
+      <div css={{ display: 'flex', flexDirection: 'column' }}>
+        <h1>{game.id}</h1>
+        <TurnDisplay />
+        <CombatantsList />
+        <RollerOrganism />
+      </div>
+      <EventFeedOrganism />
+    </div>
   );
 };
 

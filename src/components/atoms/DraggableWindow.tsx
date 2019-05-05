@@ -1,36 +1,29 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { FunctionComponent, CSSProperties } from 'react';
+import { FunctionComponent } from 'react';
 import { Rnd, Props as RndProps } from 'react-rnd';
 import NewWindow, { INewWindowProps } from 'react-new-window';
 
 const DraggableWindow: FunctionComponent<{
-  closePortal: () => void;
-  windowPopOut: () => void;
-  windowShrink: () => void;
-  isWindow: boolean;
-}> = ({
-  children,
-  closePortal,
-  isWindow,
-  windowPopOut,
-  windowShrink,
-  ...props
-}) => {
+  closePortal?: () => void;
+  windowPopOut?: () => void;
+  windowShrink?: () => void;
+  isWindow?: boolean;
+}> = ({ children, closePortal, isWindow, windowPopOut, windowShrink, ...props }) => {
   const El = isWindow ? NewWindow : Rnd;
-  const elP = isWindow
-    ? ({ copyStyles: true, onUnload: closePortal } as INewWindowProps)
-    : ({
-        style: { pointerEvents: 'auto' } as CSSProperties,
-        default: {
-          x: 0,
-          y: 0,
-          width: 500,
-          height: 768,
-        },
-        bounds: 'window',
-        dragHandleClassName: 'handle',
-      } as RndProps);
+  const newWindowProps: INewWindowProps = { copyStyles: true, onUnload: closePortal };
+  const rndProps: RndProps = {
+    style: { pointerEvents: 'auto' },
+    default: {
+      x: 0,
+      y: 0,
+      width: 500,
+      height: 768,
+    },
+    bounds: 'window',
+    dragHandleClassName: 'handle',
+  };
+  const elP = isWindow ? newWindowProps : rndProps;
   return (
     <El {...elP}>
       <div
@@ -53,10 +46,13 @@ const DraggableWindow: FunctionComponent<{
           }}
           className="handle"
         >
-          <button onClick={isWindow ? windowShrink : windowPopOut}>
+          <button type="button" onClick={isWindow ? windowShrink : windowPopOut}>
             {isWindow ? 'v' : '^'}
           </button>
-          ><button onClick={closePortal}>x</button>
+
+          <button type="button" onClick={closePortal}>
+            x
+          </button>
         </nav>
         <main
           css={{

@@ -181,8 +181,7 @@ const QuickCharacter = () => {
         </H.H6>
         <ul css={[unstyleList]}>
           <li>
-            Defining Principle: I alone deserve to be Empress; I alone can restore the Realm's
-            glory.
+            Defining Principle: I alone deserve to be Empress; I alone can restore the Realms glory.
           </li>
           <li>Defining Principle: My devotion to the Immaculate Philosophy is unwavering.</li>
           <li>Defining Tie: House Mnemon (Authoritarian Pride)</li>

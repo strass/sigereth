@@ -3,49 +3,40 @@ import { jsx } from '@emotion/core';
 import {
   FunctionComponent,
   useReducer,
-  Fragment,
   useEffect,
   useContext,
   useCallback,
   createContext,
   useMemo,
+  Fragment,
 } from 'react';
 import { firestore } from 'firebase';
-import { QuerySnapshotExpanded } from '../../types/Firestore';
+import { QuerySnapshotExpanded, DocumentSnapshotExpanded } from '../../types/Firestore';
 import Roll from '../../types/Roll';
 import { GameContext } from './GameContext';
-import { expandQuerySnapshot } from '../../util/expandSnapshot';
+import { expandQuerySnapshot, expandDocumentSnapshot } from '../../util/expandSnapshot';
 import D10 from '../../services/D10';
+import { getUserRecord } from '../../services/Firestation';
 
-// declare module 'react-hook-thunk-reducer' {
-//   export function Thunk<A, R, S>(dispatch: ThunkDispatch<A>, getState: () => S): R;
-
-//   export function ThunkDispatch<A, never>(action: A): void;
-//   export function ThunkDispatch<A, R, S>(thunk: Thunk<A, R, S>): R;
-
-//   type UseThunkReducer = <S, A>(
-//     reducer: Reducer<S, A>,
-//     initialState: S,
-//     init: (s: S) => S
-//   ) => [S, ThunkDispatch<A, any, S>];
-
-//   export default UseThunkReducer;
-// }
-
-const DiceContext = createContext({});
+const DiceContext = createContext<
+  DiceContextState & {
+    rollDice: (config: Roll['config']) => Promise<DocumentSnapshotExpanded<Roll>>;
+  }
+>({
+  rolls: null,
+  // @ts-ignore
+  rollDice: () => {},
+});
 
 interface DiceContextState {
-  rolls: QuerySnapshotExpanded<Roll>;
+  rolls: QuerySnapshotExpanded<Roll> | null;
 }
 type DiceContextAction = { type: string } & ({
   type: 'ON_SNAPSHOT';
   snap: firestore.QuerySnapshot;
 });
 
-const diceContextReducer = (
-  state: DiceContextState,
-  action: DiceContextAction
-) => {
+const diceContextReducer = (state: DiceContextState, action: DiceContextAction) => {
   switch (action.type) {
     case 'ON_SNAPSHOT':
       return { ...state, rolls: expandQuerySnapshot(action.snap) };
@@ -60,29 +51,33 @@ export const DiceContextProvider: FunctionComponent = ({ children }) => {
   const [state, dispatch] = useReducer(diceContextReducer, {
     rolls: (null as unknown) as DiceContextState['rolls'],
   });
-  const dispatchSnapshot = useCallback(
-    snap => dispatch({ type: 'ON_SNAPSHOT', snap }),
-    [dispatch]
-  );
+
   useEffect(() => {
-    return rollsRef && rollsRef.onSnapshot(dispatchSnapshot);
-  }, [game, dispatchSnapshot, rollsRef]);
+    return rollsRef && rollsRef.onSnapshot(snap => dispatch({ type: 'ON_SNAPSHOT', snap }));
+  }, [game, rollsRef]);
 
   const rollDice = useCallback(
-    (config: Roll['config']) =>
-      rollsRef && rollsRef.add({ config, results: D10.roll(config) }),
+    async (config: Roll['config']) => {
+      const theRoll: Roll = {
+        config,
+        result: D10.roll(config),
+        createdAt: firestore.FieldValue.serverTimestamp(),
+        updatedAt: firestore.FieldValue.serverTimestamp(),
+        owner: getUserRecord() as firestore.DocumentReference,
+      };
+      const t = rollsRef
+        ? expandDocumentSnapshot<Roll>(await (await rollsRef.add(theRoll)).get())
+        : Promise.reject(new Error('DiceContextProvider has bad rollsRef'));
+      return t;
+    },
     [rollsRef]
   );
 
-  const value = useMemo(() => ({ state, rollDice }), [state, rollDice]);
+  const value = useMemo(() => ({ rolls: state.rolls, rollDice }), [state, rollDice]);
 
   return (
     <DiceContext.Provider value={value}>
-      {([state.rolls] as any[]).includes(null) ? (
-        <Fragment>loading...</Fragment>
-      ) : (
-        children
-      )}
+      {state.rolls === null ? <Fragment>loading...</Fragment> : children}
     </DiceContext.Provider>
   );
 };

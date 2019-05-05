@@ -1,13 +1,11 @@
 import { useContext, useCallback } from 'react';
 import { clamp } from 'lodash';
 import { CombatantContext } from '../components/context/CombatantContext';
-import { MoteType, DamageType } from '../types/Generic';
 import { DocumentSnapshotExpanded } from '../types/Firestore';
 import Combatant from '../types/Combatant';
 import omitUndefined from '../util/omitUndefined';
 import { store } from '../services/Firestation';
-
-type Action<Type extends string, I extends object = {}> = { type: Type } & I;
+import { Action, DamageType, MoteType } from '../types/Generic';
 
 type CombatantAction =
   | Action<'TOGGLE_TURN_OVER'>
@@ -86,7 +84,7 @@ const combatantActionReducer = (
       break;
     }
     default:
-      console.error(`No action handler for action type`);
+      console.error('No action handler for action type');
   }
   console.groupEnd();
   return batch.commit();

@@ -2,13 +2,16 @@
 import { jsx } from '@emotion/core';
 import { mount, route, compose, withView } from 'navi';
 import { View } from 'react-navi';
-import { Suspense, Fragment } from 'react';
+import { Suspense, lazy } from 'react';
 import GameContextProvider from '../components/context/GameContext';
 import { DiceContextProvider } from '../components/context/DiceContext';
 import GamePage from '../components/pages/Game';
 import ErrorBoundary from '../components/atoms/ErrorBoundary';
 import GlobalLayout from '../components/layouts/Global';
 import DevNotes from '../DevNotes';
+import HeaderOrganism from '../components/organisms/Header';
+
+const LazyProfilePage = lazy(() => import('../components/pages/ProfilePage'));
 
 const withErrorBoundary = () =>
   withView(() => (
@@ -27,9 +30,7 @@ const withSuspense = () =>
 const routes = compose(
   withErrorBoundary(),
   withSuspense(),
-  withView(
-    <GlobalLayout header={<Fragment>header</Fragment>} footer={<DevNotes />} main={<View />} />
-  ),
+  withView(<GlobalLayout header={<HeaderOrganism />} footer={<DevNotes />} main={<View />} />),
   mount({
     '/': route({
       title: 'root',
@@ -53,6 +54,10 @@ const routes = compose(
         ),
         route({ title: 'Game', view: <GamePage /> })
       ),
+    }),
+    '/profile': route({
+      title: 'My Profile',
+      view: <LazyProfilePage />,
     }),
   })
 );

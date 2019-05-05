@@ -1,3 +1,7 @@
+import { firestore } from 'firebase';
+
+export type Action<Type extends string, I extends object = {}> = { type: Type } & I;
+
 export enum MoteType {
   PERSONAL = 'personal',
   PERIPHERAL = 'peripheral',
@@ -58,3 +62,8 @@ export interface Merit {
   description: string;
   dots: 1 | 2 | 3 | 4 | 5 | 'N/A';
 }
+
+export type WithDates<T> = T & {
+  createdAt: firestore.Timestamp | firestore.FieldValue;
+  updatedAt: firestore.Timestamp | firestore.FieldValue;
+};

@@ -1,5 +1,5 @@
-import Roll, { D10Faces } from '../../types/Roll';
 import { sample, range, times, flattenDeep } from 'lodash';
+import Roll, { D10Faces } from '../../types/Roll';
 
 const rollD10 = () => sample(range(1, 10)) as number;
 
@@ -23,6 +23,7 @@ const countSuccesses = (
 ) =>
   roll.reduce(
     (successes, result) =>
+      // eslint-disable-next-line no-nested-ternary
       successes + (result >= targetNumber ? (double.includes(result) ? 2 : 1) : 0),
     autosuccesses
   );
@@ -30,7 +31,12 @@ const countSuccesses = (
 const roll: (config: Roll['config']) => Roll['result'] = config => {
   const unflatDiceRolled = cascadeRoll(config.dice, config.reroll);
   const diceRolled = flattenDeep(unflatDiceRolled) as number[];
-  const successes = countSuccesses(diceRolled);
+  const successes = countSuccesses(
+    diceRolled,
+    config.double,
+    config.autosuccesses,
+    config.targetNumber
+  );
   return {
     successes,
     isBotch: successes === 0 && diceRolled.includes(1),

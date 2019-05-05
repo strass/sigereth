@@ -39,36 +39,61 @@ const firestoreReducer = (
   }
 };
 
+interface UseFirestoreOptions {}
+
+interface UseFirestoreOptionsDoc extends UseFirestoreOptions {
+  query: never;
+}
+interface UseFirestoreOptionsCollection extends UseFirestoreOptions {
+  query: (ref: firestore.CollectionReference) => firestore.Query;
+}
+
 function useFirestore<T>(
-  ref: firestore.DocumentReference
+  ref: firestore.DocumentReference,
+  options?: UseFirestoreOptionsDoc
 ): [DocumentSnapshotExpanded<T>, Dispatch<ReducerAction<typeof firestoreReducer>>];
 function useFirestore<T>(
-  ref: firestore.CollectionReference
+  ref: firestore.CollectionReference,
+  options?: UseFirestoreOptionsCollection
 ): [QuerySnapshotExpanded<T>, Dispatch<ReducerAction<typeof firestoreReducer>>];
-function useFirestore(ref: firestore.DocumentReference | firestore.CollectionReference) {
+function useFirestore(
+  ref: firestore.DocumentReference | firestore.CollectionReference,
+  options?: UseFirestoreOptionsDoc | UseFirestoreOptionsCollection
+) {
   const out = useReducer(firestoreReducer, null);
   const [, dispatch] = out;
   const refPath = ref && ref.path;
+  const hasQuery = options && options.query;
   useEffect(() => {
+    let cleanup = () => {};
     console.debug(ref ? `subscribing to ${ref.path}` : 'bad ref');
     switch (true) {
       case ref instanceof firestore.DocumentReference: {
-        (ref as firestore.DocumentReference).onSnapshot(snap => {
+        cleanup = (ref as firestore.DocumentReference).onSnapshot(snap => {
           dispatch({ type: 'ON_DOC_SNAPSHOT', snap });
         });
         break;
       }
       case ref instanceof firestore.CollectionReference: {
-        (ref as firestore.CollectionReference).onSnapshot({}, snap => {
-          dispatch({ type: 'ON_COLLECTION_SNAPSHOT', snap });
-        });
+        const query =
+          options && (options as UseFirestoreOptionsCollection).query
+            ? (options as UseFirestoreOptionsCollection).query(ref as firestore.CollectionReference)
+            : ref;
+        cleanup = (query as firestore.CollectionReference | firestore.Query).onSnapshot(
+          {},
+          snap => {
+            dispatch({ type: 'ON_COLLECTION_SNAPSHOT', snap });
+          }
+        );
         break;
       }
       default: {
         console.warn('useFirestore failure', ref);
       }
     }
-  }, [dispatch, ref, refPath]);
+    return cleanup;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dispatch, hasQuery, refPath]);
 
   return out;
 }

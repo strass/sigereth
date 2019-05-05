@@ -12,15 +12,17 @@
     "@emotion/styled": "10.0.10",
     "@types/firebase": "3.2.1",
     "@types/lodash": "4.14.123",
-    "@types/react": "16.8.15",
+    "@types/randomcolor": "^0.5.1",
+    "@types/react": "16.8.16",
     "@types/react-collapse": "4.0.2",
     "@types/react-dom": "16.8.4",
     "@types/react-rnd": "7.4.3",
-    "firebase": "5.10.1",
+    "firebase": "5.11.1",
     "lodash": "4.17.11",
     "navi": "^0.12.6",
     "polished": "3.2.0",
     "popper.js": "1.15.0",
+    "randomcolor": "^0.5.4",
     "react": "16.8.6",
     "react-collapse": "4.0.3",
     "react-dom": "16.8.6",
@@ -30,7 +32,8 @@
     "react-navi": "^0.12.6",
     "react-new-window": "0.0.12",
     "react-rnd": "9.1.2",
-    "react-scripts": "3.0.0"
+    "react-scripts": "3.0.0",
+    "react-use": "^8.3.1"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^1.6.0",
@@ -39,7 +42,7 @@
     "eslint-config-react-app": "^4.0.0",
     "eslint-plugin-prettier": "^3.0.1",
     "eslint-plugin-react-hooks": "^1.6.0",
-    "now": "^15.0.10",
+    "now": "^15.1.0",
     "prettier": "^1.17.0",
     "typescript": "3.4.5"
   },

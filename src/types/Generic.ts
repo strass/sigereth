@@ -1,6 +1,12 @@
 import { firestore } from 'firebase';
 
-export type Action<Type extends string, I extends object = {}> = { type: Type } & I;
+export type Action<Type extends string | number | symbol, I extends object = {}> = {
+  type: Type;
+} & I;
+
+export type InterfaceValueAction<T extends object> = {
+  [K in keyof T]: Action<K, { value: T[K] }>
+}[keyof T];
 
 export enum MoteType {
   PERSONAL = 'personal',
@@ -67,3 +73,12 @@ export type WithDates<T> = T & {
   createdAt: firestore.Timestamp | firestore.FieldValue;
   updatedAt: firestore.Timestamp | firestore.FieldValue;
 };
+
+export interface StaticValue {
+  value: number;
+  excellency?: {
+    maxExcellency: number;
+    unit: 'SUCCESSES';
+    motesPerUnit: number;
+  };
+}

@@ -1,24 +1,48 @@
 import { firestore } from 'firebase';
-import { WithDates } from './Generic';
+import { WithDates, DamageType } from './Generic';
 
-export type D10Faces = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10;
+export interface RollConfig {
+  dice: number;
+  double: number[];
+  reroll: number[];
+  autosuccesses: number;
+  targetNumber: number;
+  difficulty: number;
+}
+export interface RollExcellency {
+  maxExcellency: number;
+  unit: 'DICE' | 'SUCCESSES';
+  motesPerUnit: number;
+}
+export interface RollResult {
+  successes: number;
+  isBotch: boolean;
+  roll: number[];
+}
 
-interface Roll {
-  config: {
+interface BaseRoll {
+  config: RollConfig;
+  excellency?: RollExcellency;
+  result: RollResult;
+}
+
+type Roll = WithDates<BaseRoll & { owner: firestore.DocumentReference }>;
+
+export default Roll;
+
+export interface RollInput {
+  config: Partial<BaseRoll['config']> & { dice: number };
+  excellency?: BaseRoll['excellency'];
+}
+
+export interface AttackRollBase {
+  // postLabel: string; // (for stuff like `at short range`)
+  damage: {
     dice: number;
-    double?: number[];
-    reroll?: number[];
-    autosuccesses?: number;
-    targetNumber?: number;
-    difficulty?: number;
-  };
-  result: {
-    successes: number;
-    isBotch: boolean;
-    roll: number[];
+    type: DamageType;
+    overwhelming?: number;
   };
 }
 
-type RollWithDates = WithDates<Roll> & { owner: firestore.DocumentReference };
-
-export default RollWithDates;
+export interface AttackRollInput extends RollInput, AttackRollBase {}
+export interface AttackRoll extends Roll, AttackRollBase {}

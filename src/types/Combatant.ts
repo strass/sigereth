@@ -1,11 +1,11 @@
 import { firestore } from 'firebase';
 
-interface MoteCount {
+export interface MoteCount {
   current: number;
   total: number;
 }
 
-interface WillpowerCount {
+export interface WillpowerCount {
   temporary: number;
   permanent: number;
 }
@@ -22,7 +22,7 @@ interface Combatant {
   owner: firestore.DocumentReference;
 
   motes: {
-    personal: MoteCount ;
+    personal: MoteCount;
     peripheral: MoteCount;
     hasRegainedMotesThisTurn: boolean;
   } | null;
@@ -37,6 +37,8 @@ interface Combatant {
   };
 
   willpower: WillpowerCount;
+
+  sheet: firestore.DocumentReference;
 }
 
 export default Combatant;

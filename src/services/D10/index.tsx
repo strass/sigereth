@@ -1,5 +1,5 @@
 import { sample, range, times, flattenDeep } from 'lodash';
-import Roll, { D10Faces } from '../../types/Roll';
+import Roll from '../../types/Roll';
 
 const rollD10 = () => sample(range(1, 10)) as number;
 
@@ -40,7 +40,7 @@ const roll: (config: Roll['config']) => Roll['result'] = config => {
   return {
     successes,
     isBotch: successes === 0 && diceRolled.includes(1),
-    roll: diceRolled as D10Faces[],
+    roll: diceRolled as number[],
   };
 };
 

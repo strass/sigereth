@@ -46,7 +46,7 @@ const diceContextReducer = (state: DiceContextState, action: DiceContextAction) 
 };
 
 export const DiceContextProvider: FunctionComponent = ({ children }) => {
-  const { game } = useContext(GameContext);
+  const game = useContext(GameContext);
   const rollsRef = useMemo(() => game && game.ref.collection('rolls'), [game]);
   const [state, dispatch] = useReducer(diceContextReducer, {
     rolls: (null as unknown) as DiceContextState['rolls'],

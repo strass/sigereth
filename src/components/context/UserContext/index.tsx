@@ -11,29 +11,24 @@ const UserContext = createContext<DocumentSnapshotExpanded<User> | null>(null);
 
 export const UserContextProvider: FunctionComponent = ({ children }) => {
   const [userRef, setUserRef] = useState(getUserRecord());
-  useEffect(
-    () =>
-      auth().onAuthStateChanged(async newUser => {
-        if (newUser) {
-          const userRecord: firestore.DocumentSnapshot = await store
-            .doc(`/users/${newUser.uid}`)
-            .get();
-          if (userRecord.exists) {
-            setUserRef(userRecord.ref);
-          }
-        } else {
-          setUserRef(null);
-        }
-        return true;
-      }),
-    []
-  );
+
+  useEffect(() => {
+    auth().onAuthStateChanged(async newUser => {
+      if (newUser) {
+        setUserRef(store.doc(`/users/${newUser.uid}`));
+      } else {
+        console.log(2);
+        setUserRef(null);
+      }
+    });
+  }, []);
+
   return userRef ? (
     <UserContextProviderWithoutAuthWait userRef={userRef}>
       {children}
     </UserContextProviderWithoutAuthWait>
   ) : (
-    <Fragment>Signing in</Fragment>
+    <Fragment>Signing in 1</Fragment>
   );
 };
 
@@ -41,7 +36,11 @@ export const UserContextProviderWithoutAuthWait: FunctionComponent<{
   userRef: firestore.DocumentReference;
 }> = ({ children, userRef }) => {
   const [user] = useFirestore<User>(userRef);
-  return <UserContext.Provider value={user}>{children}</UserContext.Provider>;
+  return user ? (
+    <UserContext.Provider value={user}>{children}</UserContext.Provider>
+  ) : (
+    <Fragment>Signing in 2</Fragment>
+  );
 };
 
 export default UserContext;

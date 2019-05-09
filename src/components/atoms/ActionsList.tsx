@@ -1,22 +1,20 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import { FunctionComponent, useMemo } from 'react';
-import { Roll } from '../../types/QuickCharacter';
-import DiceRoll from './DiceRoll';
+import InlineRoller from './InlineRoller';
 import { SheetValueGroup } from './SheetValue';
 import { noMarginPadding } from '../../styling/normalize';
+import { QuickCharacterSheet } from '../../types/Character/Sheet';
 
-interface QuickCharacterAction {
-  label: string;
-  roll: Roll;
-}
-
-const ActionsList: FunctionComponent<{ actions: QuickCharacterAction[] }> = ({
+const ActionsList: FunctionComponent<{ actions: QuickCharacterSheet['actions'] }> = ({
   actions,
 }) => {
   const formattedActions = useMemo(
     () =>
-      actions.map(a => ({ label: a.label, value: <DiceRoll roll={a.roll} /> })),
+      actions.map(a => ({
+        label: a.label,
+        value: <InlineRoller dice={a.roll.config.dice} excellency={a.roll.excellency} />,
+      })),
     [actions]
   );
   return (

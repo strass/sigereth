@@ -1,38 +1,57 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React, { FunctionComponent, useCallback, useContext } from 'react';
+import React, { FunctionComponent, useCallback, useContext, memo } from 'react';
+import { forEach } from 'lodash';
 import { store } from '../../../services/Firestation';
 import Combatant from '../../../types/Combatant';
-import { forEach } from 'lodash';
-import { GameContext } from '../../context/GameContext';
+import { GameContext, CombatantsContext } from '../../context/GameContext';
+
+const TurnDisplayBase: FunctionComponent<{
+  turn: number;
+  advanceTurn: () => void;
+  resetTurns: () => void;
+}> = ({ turn, advanceTurn, resetTurns }) => (
+  <React.Fragment>
+    <h2>turn {turn}</h2>
+    <button type="button" onClick={advanceTurn}>
+      Next Turn
+    </button>
+    <button type="button" onClick={resetTurns}>
+      Reset Turns
+    </button>
+  </React.Fragment>
+);
+
+const MemoizedTurnDisplayBase = memo(TurnDisplayBase);
 
 const TurnDisplay: FunctionComponent = () => {
-  const { game, combatants } = useContext(GameContext);
+  const game = useContext(GameContext);
+  const combatants = useContext(CombatantsContext);
 
   const advanceTurn = useCallback(() => {
     const batch = store.batch();
     batch.set(game.ref, { turn: game.data.turn + 1 }, { merge: true });
     forEach(combatants.docs, c => {
-      batch.set(
-        c.ref,
-        {
-          turnOver: false,
-          ignoreOnslaught: c.data.ignoreOnslaught === 'SCENELONG' ? 'SCENELONG' : false,
-        } as Combatant,
-        { merge: true }
-      );
+      const fieldsToChange: Partial<Combatant> = {
+        turnOver: false,
+        ignoreOnslaught: c.data.ignoreOnslaught === 'SCENELONG' ? 'SCENELONG' : false,
+      };
+      batch.set(c.ref, fieldsToChange, { merge: true });
       batch.set(c.ref, { motes: { hasRegainedMotesThisTurn: false } }, { merge: true });
     });
     batch.commit();
-  }, [game.ref, game.data.turn, combatants]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [game.ref.path, game.data.turn, Object.keys(combatants.docs).join('')]);
+
+  const resetTurns = useCallback(() => game.ref.update({ turn: 0 }), [game.ref]);
 
   return (
-    <React.Fragment>
-      <h2>turn {game.data.turn}</h2>
-      <button onClick={advanceTurn}>Next Turn</button>
-      <button onClick={() => game.ref.update({ turn: 0 })}>Reset Turns</button>
-    </React.Fragment>
+    <MemoizedTurnDisplayBase
+      resetTurns={resetTurns}
+      turn={game.data.turn}
+      advanceTurn={advanceTurn}
+    />
   );
 };
 
-export default TurnDisplay;
+export default memo(TurnDisplay);

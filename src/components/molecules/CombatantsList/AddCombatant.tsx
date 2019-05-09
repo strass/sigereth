@@ -1,15 +1,16 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { FunctionComponent, useState, useCallback, FormEvent } from 'react';
+import { FunctionComponent, useState, useCallback, FormEvent, memo } from 'react';
 import { firestore } from 'firebase';
-import { defaultCombatant } from '../../../types/consts';
 import { toNumber, merge } from 'lodash';
+import { defaultCombatant } from '../../../types/consts';
 import NumberSpinner from '../../atoms/NumberSpinner';
 import { getUserRecord } from '../../../services/Firestation';
 
 const AddCombatant: FunctionComponent<{
   combatantsRef: firestore.CollectionReference;
 }> = ({ combatantsRef }) => {
+  console.debug('AddCombatant render');
   const [disabled, setDisabled] = useState(false);
   const [name, setName] = useState('');
   const [initiative, setInitiative] = useState(3);
@@ -73,4 +74,4 @@ const AddCombatant: FunctionComponent<{
   );
 };
 
-export default AddCombatant;
+export default memo(AddCombatant);

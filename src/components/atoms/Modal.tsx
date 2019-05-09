@@ -3,7 +3,7 @@ import { FunctionComponent } from 'react';
 
 const Modal: FunctionComponent<{
   mount: boolean;
-  domNode?: HTMLElement;
+  domNode?: HTMLElement | null;
 }> = ({ mount, domNode, children }) => {
   return mount
     ? createPortal(children, domNode || (document.querySelector('body') as HTMLBodyElement))

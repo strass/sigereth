@@ -8,7 +8,9 @@ import RollerOrganism from '../Roller';
 import EventFeedOrganism from './EventFeed';
 
 const GameOrganism: FunctionComponent = () => {
-  const { game } = useContext(GameContext);
+  console.debug('GameOrganism render');
+  const game = useContext(GameContext);
+
   return (
     <div css={{ display: 'flex', flexDirection: 'row' }}>
       <div css={{ display: 'flex', flexDirection: 'column' }}>

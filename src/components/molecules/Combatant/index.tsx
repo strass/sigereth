@@ -15,16 +15,20 @@ import { flexCenter } from '../../../styling/flex';
 import CombatantName from './Name';
 import CombatantAvatar from './Avatar';
 import Modal from '../../atoms/Modal';
-import QuickCharacter from '../QuickCharacter';
 import DraggableWindow from '../../atoms/DraggableWindow';
+import usePermissions from '../../../hooks/usePermissions';
+import CharacterSheetOrganism from '../../organisms/Sheet';
+import { CharacterSheetContextProvider } from '../../context/CharacterSheetContext';
+import { firestore } from 'firebase';
 
 const CombatantItem: FunctionComponent<{ isActive: boolean }> = ({ isActive }) => {
   const [modalState, setModal] = useState<false | 'window' | 'modal'>(false);
   const combatant = useContext(CombatantContext);
+  const { isResourceOwnerOrGameOwner } = usePermissions(combatant);
   const [detailsOpen, setDetailsOpen] = useState(false);
   return (
     <Fragment>
-      <li
+      <div
         css={{
           maxWidth: 600,
           display: 'flex',
@@ -38,6 +42,7 @@ const CombatantItem: FunctionComponent<{ isActive: boolean }> = ({ isActive }) =
             : '0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22)',
           transition: 'box-shadow 0.3s cubic-bezier(.25,.8,.25,1)',
           position: 'relative',
+          background: 'white',
         }}
       >
         <ul
@@ -67,13 +72,15 @@ const CombatantItem: FunctionComponent<{ isActive: boolean }> = ({ isActive }) =
             <button onClick={() => setModal(modalState ? false : 'modal')} type="button">
               □
             </button>
-            <button
-              type="button"
-              css={{ marginLeft: 'auto' }}
-              onClick={() => combatant.ref.delete()}
-            >
-              x
-            </button>
+            {isResourceOwnerOrGameOwner && (
+              <button
+                type="button"
+                css={{ marginLeft: 'auto' }}
+                onClick={() => combatant.ref.delete()}
+              >
+                x
+              </button>
+            )}
           </li>
         </ul>
         <Collapse
@@ -108,7 +115,7 @@ const CombatantItem: FunctionComponent<{ isActive: boolean }> = ({ isActive }) =
             <Notes />
           </div>
         </Collapse>
-      </li>
+      </div>
       <Modal mount={!!modalState}>
         <DraggableWindow
           closePortal={() => setModal(false)}
@@ -116,7 +123,16 @@ const CombatantItem: FunctionComponent<{ isActive: boolean }> = ({ isActive }) =
           windowPopOut={() => setModal('window')}
           windowShrink={() => setModal('modal')}
         >
-          <QuickCharacter />
+          <CharacterSheetContextProvider
+            sheet={
+              combatant.data.sheet ||
+              (combatant.ref.parent.parent as firestore.DocumentReference)
+                .collection('sheets')
+                .doc(combatant.id)
+            }
+          >
+            <CharacterSheetOrganism />
+          </CharacterSheetContextProvider>
         </DraggableWindow>
       </Modal>
     </Fragment>

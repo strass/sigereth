@@ -6,14 +6,14 @@ import useRoll from '../../../hooks/useRoll';
 import DiceContext from '../../context/DiceContext';
 
 const RollerOrganism = () => {
+  console.debug('RollerOrganism render');
   const { rollDice } = useContext(DiceContext);
   const [, rollConfig, setRoll] = useRoll();
   return (
     <form
       onSubmit={async e => {
         e.preventDefault();
-        const theRoll = await rollDice(rollConfig);
-        console.log(theRoll);
+        await rollDice(rollConfig);
       }}
       css={{ width: 'fit-content' }}
     >

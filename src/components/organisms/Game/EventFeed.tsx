@@ -2,16 +2,16 @@
 import { jsx } from '@emotion/core';
 import { FunctionComponent, useContext, useCallback, useEffect, useRef } from 'react';
 import { map, forEach } from 'lodash';
-import randomColor from 'randomcolor';
 import useFirestore from '../../../hooks/useFirestore';
 import { GameContext } from '../../context/GameContext';
 import Roll from '../../../types/Roll';
 import useFirestoreReducer from '../../../hooks/useFirestoreReducer';
 import User from '../../../types/User';
-import { DocumentSnapshotExpanded } from '../../../types/Firestore';
+import DiceRollMolecule from '../../molecules/DiceRoll';
+import { unstyleList } from '../../../styling/list';
 
 const EventFeedOrganism: FunctionComponent = () => {
-  const { game } = useContext(GameContext);
+  const game = useContext(GameContext);
   const [rolls] = useFirestore<Roll>(game.ref.collection('rolls'), {
     query: useCallback(ref => ref.orderBy('createdAt', 'desc').limit(20), []),
   });
@@ -37,33 +37,10 @@ const EventFeedOrganism: FunctionComponent = () => {
   }
   console.log(users);
   return (
-    <div>
-      <ol css={{ display: 'flex', flexDirection: 'column-reverse' }}>
+    <div css={{ padding: 12 }}>
+      <ol css={[unstyleList, { display: 'flex', flexDirection: 'column-reverse' }]}>
         {map(rolls.docs, r => (
-          <li key={r.id}>
-            {r.data.owner && users[r.data.owner.id] && (
-              <div
-                css={{
-                  display: 'inline-flex',
-                  alignContent: 'center',
-                  justifyContent: 'center',
-                  height: '1em',
-                  width: '1em',
-                  borderRadius: '50%',
-                  background:
-                    (users &&
-                      users[r.data.owner.id] &&
-                      (users[r.data.owner.id] as DocumentSnapshotExpanded<User>).data.color) ||
-                    randomColor({ seed: r.data.owner.id }),
-                }}
-              >
-                {users &&
-                  users[r.data.owner.id] &&
-                  (users[r.data.owner.id] as DocumentSnapshotExpanded<User>).id[0]}
-              </div>
-            )}{' '}
-            {JSON.stringify(r.data.result)}
-          </li>
+          <DiceRollMolecule key={r.id} roll={r} />
         ))}
       </ol>
     </div>

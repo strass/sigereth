@@ -7,13 +7,13 @@ import { DocumentSnapshotExpanded, QuerySnapshotExpanded } from '../../types/Fir
 import Game from '../../types/Game';
 import Combatant from '../../types/Combatant';
 
-export const GameContext = createContext<{
-  game: DocumentSnapshotExpanded<Game>;
-  combatants: QuerySnapshotExpanded<Combatant>;
-}>({
-  game: (null as unknown) as DocumentSnapshotExpanded<Game>,
-  combatants: (null as unknown) as QuerySnapshotExpanded<Combatant>,
-});
+export const GameContext = createContext<DocumentSnapshotExpanded<Game>>(
+  (null as unknown) as DocumentSnapshotExpanded<Game>
+);
+
+export const CombatantsContext = createContext<QuerySnapshotExpanded<Combatant>>(
+  (null as unknown) as QuerySnapshotExpanded<Combatant>
+);
 
 const GameContextProvider: FunctionComponent<{ gameId: string; children: ReactElement }> = ({
   children,
@@ -24,15 +24,15 @@ const GameContextProvider: FunctionComponent<{ gameId: string; children: ReactEl
   const [game] = useFirestore<Game>(gameRef);
   const [combatants] = useFirestore<Combatant>(combatantsRef);
 
-  const value = useMemo(() => ({ game, combatants }), [game, combatants]);
-
   return (
-    <GameContext.Provider value={value}>
-      {value.game === null || value.combatants === null ? (
-        <div>Loading...</div>
-      ) : (
-        <React.Fragment>{children}</React.Fragment>
-      )}
+    <GameContext.Provider value={game}>
+      <CombatantsContext.Provider value={combatants}>
+        {game === null || combatants === null ? (
+          <div>Loading...</div>
+        ) : (
+          <React.Fragment>{children}</React.Fragment>
+        )}
+      </CombatantsContext.Provider>
     </GameContext.Provider>
   );
 };

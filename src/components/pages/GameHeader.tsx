@@ -5,7 +5,7 @@ import { GameContext } from '../context/GameContext';
 import H from '../atoms/Type/Header';
 
 const GameHeader: FunctionComponent = () => {
-  const { game } = useContext(GameContext);
+  const game = useContext(GameContext);
   if (game.exists) {
     return (
       <Fragment>

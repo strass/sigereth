@@ -1,24 +1,29 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { render } from 'react-dom';
+import ReactDOM, { render } from 'react-dom';
 import { Router } from 'react-navi';
 import routes from './routes';
 import { TooltipContextProvider } from './components/context/TooltipContext';
 import './services/Firestation';
-import { WindowContextProvider } from './components/context/WindowContext';
 import { UserContextProvider } from './components/context/UserContext';
+import React from 'react';
 
 function App() {
   return (
-    <WindowContextProvider>
-      <TooltipContextProvider>
-        <UserContextProvider>
-          <Router routes={routes} />
-        </UserContextProvider>
-      </TooltipContextProvider>
-    </WindowContextProvider>
+    <TooltipContextProvider>
+      <UserContextProvider>
+        <Router routes={routes} />
+      </UserContextProvider>
+    </TooltipContextProvider>
   );
 }
 
-const rootElement = document.getElementById('root');
-render(<App />, rootElement);
+if (process.env.NODE_ENV !== 'production') {
+  import('react-axe').then(axe => {
+    // @ts-ignore
+    axe.default(React, ReactDOM, 1000);
+    render(<App />, document.getElementById('root'));
+  });
+} else {
+  render(<App />, document.getElementById('root'));
+}

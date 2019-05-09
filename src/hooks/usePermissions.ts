@@ -9,7 +9,7 @@ export default (
   resource?: DocumentSnapshotExpanded<{ owner: firestore.DocumentReference }>
 ) => {
   const user = useContext(UserContext);
-  const { game } = useContext(GameContext);
+  const game = useContext(GameContext);
   const value = useMemo(() => {
     const currentUser = auth().currentUser;
     if (

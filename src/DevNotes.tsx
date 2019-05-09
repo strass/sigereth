@@ -15,25 +15,24 @@ const DevNotes = () => {
         <h2>todo</h2>
         <ul>
           <li>style combatant</li>
-          <li>evaluate viability of controlling via scrolling</li>
-          <li>move more updators into useCombatantAction</li>
           <li>loading control + Suspense</li>
-          <li>react-flip-toolkit</li>
           <li>
             user management
             <ul>
               <li>ownership + visibility</li>
             </ul>
           </li>
-          <li>events + event log</li>
-          <li>rolling system</li>
           <li>effects + expenditures</li>
-          <li>continue adding usePermissions for combatant sections</li>
-          <li>combatantitem refactor into molecules</li>
-          <li>configure combatant</li>
           <li>real webpack setup</li>
           <li>convert to dotenv setup (firebase) https://www.npmjs.com/package/dotenv-webpack</li>
           <li>sentry</li>
+          <li>continue building out the character sheet viewer</li>
+          <li>iterate on draggablewindow</li>
+          <li>refactor context providers into splitting dispatch and store value</li>
+          <li>refactor dice roller and hook into inline roller</li>
+          <li>add excellency support to dice roller</li>
+          <li>move dice roller into some sort of tabbed view</li>
+          <li>consolidate events</li>
         </ul>
         <h2>bugs</h2>
         <ul>

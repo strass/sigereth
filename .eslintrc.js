@@ -35,6 +35,7 @@ module.exports = {
     'react/jsx-filename-extension': [1, { extensions: ['.js', '.jsx', '.tsx'] }],
     'import/no-extraneous-dependencies': ['error', { devDependencies: ['**/*.stories.tsx'] }],
     'react/jsx-one-expression-per-line': 'off',
+    '@typescript-eslint/no-object-literal-type-assertion': ['error', { 'allow-arguments': true }],
 
     // This rule was deprecated in v6.1.0. It will no longer be maintained. Please use label-has-associated-control instead.
     'jsx-a11y/label-has-for': 'off',

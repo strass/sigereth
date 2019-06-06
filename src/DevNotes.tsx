@@ -15,13 +15,6 @@ const DevNotes = () => {
         <h2>todo</h2>
         <ul>
           <li>style combatant</li>
-          <li>loading control + Suspense</li>
-          <li>
-            user management
-            <ul>
-              <li>ownership + visibility</li>
-            </ul>
-          </li>
           <li>effects + expenditures</li>
           <li>real webpack setup</li>
           <li>convert to dotenv setup (firebase) https://www.npmjs.com/package/dotenv-webpack</li>
@@ -33,6 +26,7 @@ const DevNotes = () => {
           <li>add excellency support to dice roller</li>
           <li>move dice roller into some sort of tabbed view</li>
           <li>consolidate events</li>
+          <li>think about using tippy.js for tooltips?</li>
         </ul>
         <h2>bugs</h2>
         <ul>

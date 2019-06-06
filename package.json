@@ -34,7 +34,7 @@
     "react-new-window": "0.0.12",
     "react-rnd": "9.1.2",
     "react-scripts": "3.0.1",
-    "react-use": "^8.4.0",
+    "react-use": "^9.0.0",
     "use-thunk": "^0.1.0",
     "utility-types": "^3.7.0"
   },
@@ -53,10 +53,20 @@
     "typescript": "3.4.5"
   },
   "scripts": {
-    "start": "PORT=443 react-scripts start",
+    "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
+  },
+  "alias": {
+    "react": "./node_modules/react",
+    "react-dom": "./node_modules/react-dom"
+  },
+  "resolutions": {
+    "**/react": "16.8.6",
+    "**/react-dom": "16.8.6",
+    "react": "16.8.6",
+    "react-dom": "16.8.6"
   },
   "browserslist": [
     ">0.2%",

@@ -7,7 +7,9 @@ import CharacterSheet, { QuickCharacterSheet } from '../types/Character/Sheet';
 import { firestore } from 'firebase';
 
 type CharacterSheetActions<T extends CharacterSheet['type']> = {
-  QUICK_CHARACTER_SHEET: Action<'CREATE_ATTACK', { attack: QuickCharacterSheet['attacks'][0] }>;
+  QUICK_CHARACTER_SHEET:
+    | Action<'CREATE_ATTACK', { attack: QuickCharacterSheet['attacks'][0] }>
+    | Action<'CREATE_INTIMACY', { intimacy: QuickCharacterSheet['intimacies'][0] }>;
   FULL_CHARACTER_SHEET: Action<'test', {}>;
 }[T];
 
@@ -22,6 +24,11 @@ const characterSheetActionReducer = (
     case 'CREATE_ATTACK':
       batch.update(sheet.ref, { attacks: firestore.FieldValue.arrayUnion(action.attack) });
       break;
+
+    case 'CREATE_INTIMACY':
+      batch.update(sheet.ref, { intimacies: firestore.FieldValue.arrayUnion(action.intimacy) });
+      break;
+
     default:
       console.error('No action handler for action type');
       break;

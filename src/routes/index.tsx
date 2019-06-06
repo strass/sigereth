@@ -12,6 +12,7 @@ import DevNotes from '../DevNotes';
 import HeaderOrganism from '../components/organisms/Header';
 
 const LazyProfilePage = lazy(() => import('../components/pages/ProfilePage'));
+const LazyGameSettingsPage = lazy(() => import('../components/pages/GameSettings'));
 
 const withErrorBoundary = () =>
   withView(() => (
@@ -52,7 +53,12 @@ const routes = compose(
             <View />
           </DiceContextProvider>
         ),
-        route({ title: 'Game', view: <GamePage /> })
+        // Seems like this has to be here to catch an error
+        withSuspense(),
+        mount({
+          '/settings': route({ title: 'Game Settings', view: <LazyGameSettingsPage /> }),
+          '/': route({ title: 'Game', view: <GamePage /> }),
+        })
       ),
     }),
     '/profile': route({

@@ -9,16 +9,16 @@ import { DocumentSnapshotExpanded } from '../../../../types/Firestore';
 import InlineRollerAtom from '../../../atoms/InlineRoller';
 import { RollInput } from '../../../../types/Roll';
 import ActionsList from '../../../atoms/ActionsList';
-import { unstyleList } from '../../../../styling/list';
 import QuickCharacterAttacks from './Attacks';
+import QuickCharacterIntimacies from './Intimacies';
 
 const QuickCharacter: FunctionComponent<{
   sheet: DocumentSnapshotExpanded<QuickCharacterSheet>;
 }> = ({ sheet }) => {
   return (
     <article>
-      {/* <H.H1>{qc.data.name}</H.H1>
-      <p>{qc.data.description}</p> */}
+      <H.H1>{sheet.data.name}</H.H1>
+      <p>{sheet.data.description}</p>
       <div>
         <SheetValueGroup
           values={[
@@ -139,13 +139,7 @@ const QuickCharacter: FunctionComponent<{
         >
           Intimacies
         </H.H6>
-        <ul css={[unstyleList]}>
-          {sheet.data.intimacies.map((intimacy, i) => (
-            <li key={i}>
-              {intimacy.level} {intimacy.type}: {intimacy.description}
-            </li>
-          ))}
-        </ul>
+        <QuickCharacterIntimacies sheet={sheet} />
       </section>
     </article>
   );

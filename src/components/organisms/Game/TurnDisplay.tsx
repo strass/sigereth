@@ -1,7 +1,6 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import React, { FunctionComponent, useCallback, useContext, memo } from 'react';
-import { forEach } from 'lodash';
 import { store } from '../../../services/Firestation';
 import Combatant from '../../../types/Combatant';
 import { GameContext, CombatantsContext } from '../../context/GameContext';
@@ -31,7 +30,7 @@ const TurnDisplay: FunctionComponent = () => {
   const advanceTurn = useCallback(() => {
     const batch = store.batch();
     batch.set(game.ref, { turn: game.data.turn + 1 }, { merge: true });
-    forEach(combatants.docs, c => {
+    combatants.docs.forEach(c => {
       const fieldsToChange: Partial<Combatant> = {
         turnOver: false,
         ignoreOnslaught: c.data.ignoreOnslaught === 'SCENELONG' ? 'SCENELONG' : false,

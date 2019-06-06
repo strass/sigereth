@@ -1,26 +1,30 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { FunctionComponent, useContext } from 'react';
+import { FunctionComponent, useContext, Fragment } from 'react';
 import CombatantsList from '../../molecules/CombatantsList';
 import TurnDisplay from './TurnDisplay';
 import { GameContext } from '../../context/GameContext';
-import RollerOrganism from '../Roller';
 import EventFeedOrganism from './EventFeed';
+import { Link } from 'react-navi';
+import FooterToolbarOrganism from '../FooterToolbar';
 
 const GameOrganism: FunctionComponent = () => {
   console.debug('GameOrganism render');
   const game = useContext(GameContext);
 
   return (
-    <div css={{ display: 'flex', flexDirection: 'row' }}>
-      <div css={{ display: 'flex', flexDirection: 'column' }}>
-        <h1>{game.id}</h1>
-        <TurnDisplay />
-        <CombatantsList />
-        <RollerOrganism />
+    <Fragment>
+      <div css={{ display: 'flex', flexDirection: 'row' }}>
+        <div css={{ display: 'flex', flexDirection: 'column' }}>
+          <h1>{game.id}</h1>
+          <Link href={'settings'}>Link to game settings</Link>
+          <TurnDisplay />
+          <CombatantsList />
+        </div>
+        <EventFeedOrganism />
       </div>
-      <EventFeedOrganism />
-    </div>
+      <FooterToolbarOrganism />
+    </Fragment>
   );
 };
 

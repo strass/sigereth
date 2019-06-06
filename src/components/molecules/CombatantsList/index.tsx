@@ -1,7 +1,7 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import React, { FunctionComponent, useContext, useMemo, memo } from 'react';
-import { orderBy, map, reject, head } from 'lodash';
+import { orderBy, reject, head } from 'lodash';
 import { Flipper, Flipped } from 'react-flip-toolkit';
 import { firestore } from 'firebase';
 import AddCombatant from './AddCombatant';
@@ -47,7 +47,8 @@ const CombatantsList = () => {
   const combatantsRef = useMemo(() => game.ref.collection('combatants'), [game]);
 
   // TODO: optimization
-  const orderedCombatants = orderBy(map(combatants.docs, c => c), ['data.initiative'], ['desc']);
+  const orderedCombatants = orderBy(combatants.docs, ['data.initiative'], ['desc']);
+
   const activeCombatants = reject(orderedCombatants, c => c.data.turnOver);
   const activeCombatant: DocumentSnapshotExpanded<Combatant> | undefined = head(activeCombatants);
   const orderedCombatantIds = useMemo(
@@ -55,6 +56,7 @@ const CombatantsList = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [orderedCombatants.map(c => c.id).join('')]
   );
+
   return (
     <MemoizedCombatantsListBase
       combatantsRef={combatantsRef}

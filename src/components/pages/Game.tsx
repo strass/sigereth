@@ -10,7 +10,6 @@ import { getUserRecord } from '../../services/Firestation';
 const blankGame = (id: string): Game => ({
   name: id,
   turn: 0,
-  version: 0,
   owner: getUserRecord() as firestore.DocumentReference,
   players: [],
 });

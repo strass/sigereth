@@ -18,7 +18,7 @@
     "@types/react-dom": "16.8.4",
     "@types/react-rnd": "7.4.3",
     "firebase": "6.0.1",
-    "lodash": "4.17.11",
+    "lodash": "4.17.19",
     "navi": "^0.12.6",
     "polished": "3.3.0",
     "popper.js": "1.15.0",
